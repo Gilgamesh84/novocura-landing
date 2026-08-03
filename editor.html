@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novocura — Site Editor</title>
+<style>
+  :root{--forest:#2C4A3B;--forest-deep:#1B2E23;--parchment:#F6F1E7;--sand:#EAE2D0;--brass:#B08D57;--ink:#3A4A40;--ink-soft:#6B7B6F}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#EDE7DA;color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+  /* ——— top bar ——— */
+  .bar{display:flex;align-items:center;gap:14px;padding:10px 18px;background:var(--forest-deep);color:var(--parchment);flex-wrap:wrap}
+  .brand{font-size:14px;letter-spacing:2px;text-transform:uppercase}
+  .brand b{color:var(--brass);font-weight:600}
+  .seg{display:flex;background:rgba(246,241,231,.12);border-radius:999px;padding:3px}
+  .seg button{border:none;background:transparent;color:rgba(246,241,231,.7);font-size:12px;padding:6px 14px;border-radius:999px;cursor:pointer;letter-spacing:.5px}
+  .seg button.on{background:var(--brass);color:var(--forest-deep);font-weight:600}
+  .spacer{flex:1}
+  .btn{border:1px solid rgba(246,241,231,.35);background:transparent;color:var(--parchment);font-size:12px;padding:7px 14px;border-radius:6px;cursor:pointer;letter-spacing:.4px}
+  .btn:hover{background:rgba(246,241,231,.1)}
+  .btn.primary{background:var(--brass);border-color:var(--brass);color:var(--forest-deep);font-weight:600}
+  .btn.primary:hover{opacity:.9}
+  /* ——— help strip ——— */
+  .howto{background:var(--sand);border-bottom:1px solid rgba(44,74,59,.12);padding:9px 18px;font-size:12.5px;line-height:1.7;color:var(--ink)}
+  .howto b{color:var(--forest-deep)}
+  .howto .step{display:inline-block;margin-right:22px}
+  .howto kbd{background:var(--parchment);border:1px solid rgba(44,74,59,.25);border-radius:4px;padding:0 5px;font-family:inherit;font-size:11px}
+  /* ——— stage ——— */
+  .wrap{flex:1;position:relative;background:#DDD5C2}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:none;background:var(--parchment)}
+  .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-soft);letter-spacing:1px}
+  /* ——— toast ——— */
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--forest-deep);color:var(--parchment);
+    font-size:13px;padding:11px 22px;border-radius:8px;opacity:0;transition:all .3s ease;pointer-events:none;z-index:999;max-width:80vw;text-align:center;line-height:1.5}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* ——— error box ——— */
+  .err{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:0 8vw;font-size:14px;line-height:1.8}
+  .err textarea{width:min(680px,90vw);height:120px;font-size:11px;padding:10px;border:1px solid rgba(44,74,59,.3);border-radius:6px;background:#fff}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="brand">NOVOCURA <b>· Site Editor</b></div>
+  <div class="seg" id="seg">
+    <button data-page="index.html" class="on">Türkçe</button>
+    <button data-page="en.html">English</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn" id="btnReset">↺ Start over</button>
+  <button class="btn" id="btnCopy">Copy the code</button>
+  <button class="btn primary" id="btnExport">Download updated file</button>
+</div>
+<div class="howto">
+  <span class="step"><b>1.</b> Click any text and simply type — you're editing the real page.</span>
+  <span class="step"><b>2.</b> Drag cards by their <kbd>⠿</kbd> handle to reorder · double-click a picture to replace it · select text for <b>B</b> / <i>I</i>.</span>
+  <span class="step"><b>3.</b> Press <b>Download updated file</b> and send it to Kimi (or paste it over the file on GitHub). Animations pause here — they return on the live site.</span>
+</div>
+<div class="wrap">
+  <div class="loading" id="loading">Loading your site…</div>
+  <iframe id="stage" title="Site preview"></iframe>
+  <div class="err" id="errbox">
+    <div>Couldn't reach the live site code.<br>Paste the page's code below (on GitHub: open the file → Raw → select all → copy), then press Load.</div>
+    <textarea id="pasteBox" placeholder="Paste the page code here…"></textarea>
+    <button class="btn primary" id="btnLoadPaste" style="color:var(--forest-deep)">Load pasted code</button>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const RAW_BASE = 'https://raw.githubusercontent.com/Gilgamesh84/novocura-landing/main/';
+const qs = new URLSearchParams(location.search);
+const BASE = qs.get('base') || RAW_BASE;
+const stage = document.getElementById('stage');
+let currentFile = 'index.html';
+let scriptsStore = [];   // script outerHTML, restored on export
+
+function toast(msg, ms){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'), ms||3400); }
+
+/* ————— load a page into the editing stage ————— */
+async function loadPage(file){
+  currentFile = file;
+  document.getElementById('loading').style.display='flex';
+  document.getElementById('errbox').style.display='none';
+  try{
+    const res = await fetch(BASE + file, {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const html = await res.text();
+    mountHtml(html);
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('errbox').style.display='flex';
+  }
+}
+document.getElementById('btnLoadPaste').addEventListener('click', ()=>{
+  const v = document.getElementById('pasteBox').value.trim();
+  if(v.indexOf('<html') === -1){ toast('That does not look like the page code — copy the whole thing.'); return; }
+  document.getElementById('errbox').style.display='none';
+  mountHtml(v);
+});
+
+/* Strip <script> tags (animations pause while editing) and park them as placeholder
+   comments so they can be restored exactly on export. Then render into the iframe. */
+function mountHtml(html){
+  const parsed = new DOMParser().parseFromString(html, 'text/html');
+  scriptsStore = [];
+  parsed.querySelectorAll('script').forEach(s=>{
+    scriptsStore.push(s.outerHTML);
+    s.replaceWith(parsed.createComment('nvx-script-'+(scriptsStore.length-1)));
+  });
+  // make sure nothing stays hidden that animations would normally reveal
+  const fix = parsed.createElement('style');
+  fix.className = 'nvx';
+  fix.textContent = '.reveal,.jbadge,.jtext{opacity:1 !important;transform:none !important}'
+    + 'svg.journey-path{display:none}'
+    + '.progress,.progress-label{display:none}'
+    + 'header{background:rgba(246,241,231,.94);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(44,74,59,.08)}';
+  parsed.head.appendChild(fix);
+  stage.srcdoc = '<!DOCTYPE html>\n' + parsed.documentElement.outerHTML;
+}
+
+stage.addEventListener('load', ()=>{
+  const doc = stage.contentDocument;
+  if(!doc || !doc.body) return;
+  document.getElementById('loading').style.display='none';
+  initEditing(doc);
+});
+
+/* ————— turn the page into an editor ————— */
+function initEditing(doc){
+  // 1. editing styles
+  const st = doc.createElement('style');
+  st.className = 'nvx';
+  st.textContent =
+    '[contenteditable]{outline:none;cursor:text;caret-color:#B08D57}'
+    + '[contenteditable]:hover{outline:1.5px dashed rgba(176,141,87,.85);outline-offset:3px}'
+    + '[contenteditable]:focus{outline:2px solid rgba(176,141,87,.9);outline-offset:3px;background:rgba(176,141,87,.07)}'
+    + '.nvx-handle{position:absolute;top:4px;right:6px;z-index:60;cursor:grab;color:#B08D57;font-size:16px;'
+    + 'line-height:1;user-select:none;-webkit-user-select:none;font-family:monospace;padding:3px}'
+    + '.nvx-handle:active{cursor:grabbing}'
+    + '.entry,.fact,.teach-item{position:relative}'
+    + '.nvx-toolbar{position:fixed;z-index:200;display:none;gap:4px;background:#1B2E23;border-radius:6px;padding:4px;box-shadow:0 6px 22px rgba(27,46,35,.35)}'
+    + '.nvx-toolbar button{border:none;background:transparent;color:#F6F1E7;font-size:13px;padding:4px 10px;cursor:pointer;border-radius:4px}'
+    + '.nvx-toolbar button:hover{background:rgba(246,241,231,.15)}';
+  doc.head.appendChild(st);
+
+  // 2. make every "leaf" text element editable (elements with direct text, no block children)
+  const BLOCK = {H1:1,H2:1,H3:1,H4:1,P:1,DIV:1,SECTION:1,UL:1,OL:1,LI:1,HEADER:1,FOOTER:1,FIGURE:1,FORM:1,NAV:1,TABLE:1,BLOCKQUOTE:1,SVG:1,SCRIPT:1,STYLE:1};
+  const SKIP  = {SCRIPT:1,STYLE:1,SVG:1,IFRAME:1,NOSCRIPT:1};
+  doc.querySelectorAll('body *').forEach(el=>{
+    if(SKIP[el.tagName] || el.classList.contains('nvx')) return;
+    let hasText=false, hasBlockChild=false;
+    el.childNodes.forEach(n=>{
+      if(n.nodeType===3 && n.textContent.trim()) hasText=true;
+      if(n.nodeType===1 && BLOCK[n.tagName]) hasBlockChild=true;
+    });
+    if(hasText && !hasBlockChild){ el.setAttribute('contenteditable','true'); el.setAttribute('spellcheck','false'); }
+  });
+
+  // 3. links and buttons never navigate while editing
+  doc.addEventListener('click', e=>{ e.preventDefault(); });
+
+  // 4. drag-to-reorder handles on repeating cards
+  const groups = new Set();
+  ['.entries','.facts','ul.creds'].forEach(sel=>doc.querySelectorAll(sel).forEach(g=>groups.add(g)));
+  doc.querySelectorAll('.teach-item').forEach(i=>groups.add(i.parentNode));
+  let dragged = null;
+  groups.forEach(g=>{
+    Array.from(g.children).forEach(card=>{
+      if(!card.tagName || card.classList.contains('nvx')) return;
+      const h = doc.createElement('span');
+      h.className = 'nvx nvx-handle';
+      h.textContent = '⠿';
+      h.title = 'Drag to move';
+      card.appendChild(h);
+      h.addEventListener('mousedown', ()=>{ card.setAttribute('draggable','true'); });
+      doc.addEventListener('mouseup', ()=>{ card.removeAttribute('draggable'); });
+      card.addEventListener('dragstart', ()=>{ dragged=card; card.style.opacity='.35'; });
+      card.addEventListener('dragend', ()=>{ card.style.opacity=''; card.removeAttribute('draggable'); dragged=null; });
+    });
+    g.addEventListener('dragover', ev=>{
+      ev.preventDefault();
+      if(!dragged || dragged.parentNode!==g) return;
+      const sibs = Array.from(g.children).filter(c=>c!==dragged);
+      let before = null;
+      for(const c of sibs){
+        const r = c.getBoundingClientRect();
+        if(ev.clientY < r.top + r.height*.55 || (ev.clientY < r.bottom && ev.clientX < r.left + r.width/2)){ before=c; break; }
+      }
+      if(before) g.insertBefore(dragged,before); else g.appendChild(dragged);
+    });
+  });
+
+  // 5. double-click any image to replace it
+  doc.addEventListener('dblclick', e=>{
+    if(e.target.tagName==='IMG'){ window.parent.nvxPickImage(e.target); }
+  });
+
+  // 6. floating Bold / Italic / Clear toolbar on text selection
+  const tb = doc.createElement('div');
+  tb.className = 'nvx nvx-toolbar';
+  tb.innerHTML = '<button data-c="bold"><b>B</b></button><button data-c="italic"><i>I</i></button><button data-c="removeFormat">✕</button>';
+  doc.body.appendChild(tb);
+  tb.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('mousedown', e=>{
+      e.preventDefault();               // keep the selection alive
+      doc.execCommand(b.dataset.c,false,null);
+    });
+  });
+  doc.addEventListener('selectionchange', ()=>{
+    const sel = doc.getSelection();
+    if(sel && !sel.isCollapsed && sel.rangeCount){
+      const r = sel.getRangeAt(0).getBoundingClientRect();
+      tb.style.display='flex';
+      tb.style.left = Math.max(8, r.left + r.width/2 - 60) + 'px';
+      tb.style.top  = Math.max(8, r.top - 44) + 'px';
+    }else{ tb.style.display='none'; }
+  });
+}
+
+/* ————— image replacement (runs in the parent window) ————— */
+window.nvxPickImage = function(imgEl){
+  let inp = document.getElementById('nvxFile');
+  if(!inp){
+    inp = document.createElement('input');
+    inp.type='file'; inp.accept='image/*'; inp.id='nvxFile'; inp.style.display='none';
+    document.body.appendChild(inp);
+  }
+  inp.onchange = ()=>{
+    const f = inp.files[0];
+    if(!f) return;
+    const rd = new FileReader();
+    rd.onload = ()=>{ imgEl.src = rd.result; toast('Picture replaced. Remember to Download the updated file when you finish.'); };
+    rd.readAsDataURL(f);
+    inp.value='';
+  };
+  inp.click();
+};
+
+/* ————— export: clean editor marks, restore scripts, hand back a perfect file ————— */
+function serialize(){
+  const doc = stage.contentDocument;
+  const c = doc.cloneNode(true);
+  // strip editor UI + editing attributes
+  c.querySelectorAll('.nvx').forEach(n=>n.remove());
+  ['contenteditable','spellcheck','draggable'].forEach(a=>c.querySelectorAll('['+a+']').forEach(n=>n.removeAttribute(a)));
+  // the original page carries no inline styles — drop any the editor session introduced
+  c.querySelectorAll('body [style]').forEach(n=>n.removeAttribute('style'));
+  let out = '<!DOCTYPE html>\n' + c.documentElement.outerHTML;
+  // restore parked scripts
+  scriptsStore.forEach((s,i)=>{ out = out.replace('<!--nvx-script-'+i+'-->', s); });
+  return out;
+}
+
+document.getElementById('btnExport').addEventListener('click', ()=>{
+  const blob = new Blob([serialize()], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = currentFile;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  toast('Downloaded '+currentFile+' — send it to Kimi, or paste it over the same file on GitHub (file → pencil → select all → paste → Commit).', 7000);
+});
+document.getElementById('btnCopy').addEventListener('click', async ()=>{
+  try{ await navigator.clipboard.writeText(serialize()); toast('Copied. On GitHub: open '+currentFile+' → pencil → select all → paste → Commit changes.', 6000); }
+  catch(e){ toast('Copy was blocked by the browser — use Download instead.'); }
+});
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  if(confirm('Start over? Every change you made on this page will be lost.')) loadPage(currentFile);
+});
+document.getElementById('seg').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b || b.classList.contains('on')) return;
+  if(!confirm('Switch language? Unsaved changes on this page will be lost.')) return;
+  document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on', x===b));
+  loadPage(b.dataset.page);
+});
+
+loadPage(currentFile);
+</script>
+</body>
+</html>
