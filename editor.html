@@ -26,10 +26,32 @@
   .howto b{color:var(--forest-deep)}
   .howto .step{display:inline-block;margin-right:22px}
   .howto kbd{background:var(--parchment);border:1px solid rgba(44,74,59,.25);border-radius:4px;padding:0 5px;font-family:inherit;font-size:11px}
-  /* ——— stage ——— */
-  .wrap{flex:1;position:relative;background:#DDD5C2}
+  /* ——— main area: stage + inspector ——— */
+  .main{flex:1;display:flex;min-height:0}
+  .wrap{flex:1;position:relative;background:#DDD5C2;min-width:0}
   iframe{position:absolute;inset:0;width:100%;height:100%;border:none;background:var(--parchment)}
   .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-soft);letter-spacing:1px}
+  /* ——— inspector panel ——— */
+  #panel{width:252px;background:var(--parchment);border-left:1px solid rgba(44,74,59,.15);padding:18px 16px;overflow-y:auto;flex-shrink:0}
+  #panel h3{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brass);margin-bottom:4px}
+  #panel .who{font-size:12px;color:var(--ink-soft);margin-bottom:16px;min-height:16px;font-style:italic}
+  .row{margin-bottom:13px}
+  .row label{display:block;font-size:11px;letter-spacing:.6px;color:var(--ink-soft);margin-bottom:5px;text-transform:uppercase}
+  .row select,.row input[type=number]{width:100%;padding:7px 8px;font-size:13px;border:1px solid rgba(44,74,59,.25);border-radius:6px;background:#fff;color:var(--ink)}
+  .row input[type=color]{width:100%;height:32px;padding:2px;border:1px solid rgba(44,74,59,.25);border-radius:6px;background:#fff;cursor:pointer}
+  .row select:focus,.row input:focus{outline:2px solid rgba(176,141,87,.5)}
+  .checks{display:flex;gap:16px}
+  .checks label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink);text-transform:none;letter-spacing:0;margin-bottom:0;cursor:pointer}
+  .alignbtns{display:flex;gap:6px}
+  .alignbtns button{flex:1;padding:7px 0;font-size:12px;border:1px solid rgba(44,74,59,.25);background:#fff;border-radius:6px;cursor:pointer;color:var(--ink)}
+  .alignbtns button.on{background:var(--brass);border-color:var(--brass);color:var(--forest-deep);font-weight:600}
+  .btns{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+  .btns button{padding:9px 0;font-size:12px;border-radius:6px;cursor:pointer;letter-spacing:.5px}
+  #pMove{background:var(--forest-deep);color:var(--parchment);border:none}
+  #pMove.armed{background:var(--brass);color:var(--forest-deep);font-weight:600}
+  #pReset{background:transparent;border:1px solid rgba(44,74,59,.3);color:var(--ink-soft)}
+  .tip{margin-top:16px;font-size:11.5px;line-height:1.7;color:var(--ink-soft)}
+  #panel.disabled .row,#panel.disabled .btns{opacity:.35;pointer-events:none}
   /* ——— toast ——— */
   #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--forest-deep);color:var(--parchment);
     font-size:13px;padding:11px 22px;border-radius:8px;opacity:0;transition:all .3s ease;pointer-events:none;z-index:999;max-width:80vw;text-align:center;line-height:1.5}
@@ -52,18 +74,63 @@
   <button class="btn primary" id="btnExport">Download updated file</button>
 </div>
 <div class="howto">
-  <span class="step"><b>1.</b> Click any text and simply type — you're editing the real page.</span>
-  <span class="step"><b>2.</b> Drag cards by their <kbd>⠿</kbd> handle to reorder · double-click a picture to replace it · select text for <b>B</b> / <i>I</i>.</span>
-  <span class="step"><b>3.</b> Press <b>Download updated file</b> and send it to Kimi (or paste it over the file on GitHub). Animations pause here — they return on the live site.</span>
+  <span class="step"><b>1.</b> Click any text — type to change the words; the panel on the right changes its look.</span>
+  <span class="step"><b>2.</b> <b>✥ Move</b> in the panel relocates a block · <kbd>⠿</kbd> handles reorder cards · double-click a picture to replace it.</span>
+  <span class="step"><b>3.</b> Press <b>Download updated file</b> and send it to Kimi (or paste it over the file on GitHub).</span>
 </div>
-<div class="wrap">
-  <div class="loading" id="loading">Loading your site…</div>
-  <iframe id="stage" title="Site preview"></iframe>
-  <div class="err" id="errbox">
-    <div>Couldn't reach the live site code.<br>Paste the page's code below (on GitHub: open the file → Raw → select all → copy), then press Load.</div>
-    <textarea id="pasteBox" placeholder="Paste the page code here…"></textarea>
-    <button class="btn primary" id="btnLoadPaste" style="color:var(--forest-deep)">Load pasted code</button>
+<div class="main">
+  <div class="wrap">
+    <div class="loading" id="loading">Loading your site…</div>
+    <iframe id="stage" title="Site preview"></iframe>
+    <div class="err" id="errbox">
+      <div>Couldn't reach the live site code.<br>Paste the page's code below (on GitHub: open the file → Raw → select all → copy), then press Load.</div>
+      <textarea id="pasteBox" placeholder="Paste the page code here…"></textarea>
+      <button class="btn primary" id="btnLoadPaste" style="color:var(--forest-deep)">Load pasted code</button>
+    </div>
   </div>
+  <aside id="panel" class="disabled">
+    <h3>Text &amp; layout</h3>
+    <div class="who" id="pWho">click a text block on the page…</div>
+    <div class="row">
+      <label>Font</label>
+      <select id="pFont">
+        <option value="">(as designed)</option>
+        <option value="'Cormorant Garamond',serif">Cormorant Garamond · serif</option>
+        <option value="'Montserrat',sans-serif">Montserrat · sans</option>
+        <option value="Georgia,'Times New Roman',serif">Georgia · serif</option>
+        <option value="Arial,Helvetica,sans-serif">Arial · sans</option>
+      </select>
+    </div>
+    <div class="row"><label>Size — px</label><input id="pSize" type="number" step="0.5" min="8" max="120"></div>
+    <div class="row"><label>Leading (line spacing)</label><input id="pLead" type="number" step="0.05" min="0.8" max="3"></div>
+    <div class="row"><label>Letter spacing — px</label><input id="pTrack" type="number" step="0.1" min="-3" max="20"></div>
+    <div class="row">
+      <label>Weight</label>
+      <select id="pWeight">
+        <option value="">(as designed)</option>
+        <option value="300">Light · 300</option>
+        <option value="400">Regular · 400</option>
+        <option value="500">Medium · 500</option>
+        <option value="600">Semibold · 600</option>
+      </select>
+    </div>
+    <div class="row checks">
+      <label><input type="checkbox" id="pItalic"> Italic</label>
+      <label><input type="checkbox" id="pCaps"> CAPITALS</label>
+    </div>
+    <div class="row"><label>Colour</label><input id="pColor" type="color"></div>
+    <div class="row">
+      <label>Align</label>
+      <div class="alignbtns">
+        <button data-a="left">Left</button><button data-a="center">Centre</button><button data-a="right">Right</button>
+      </div>
+    </div>
+    <div class="btns">
+      <button id="pMove">✥ Move this block</button>
+      <button id="pReset">Reset this block's styling</button>
+    </div>
+    <p class="tip">Changes apply to the block you clicked. Nothing is saved until you press <b>Download updated file</b>.</p>
+  </aside>
 </div>
 <div id="toast"></div>
 <script>
@@ -71,35 +138,39 @@ const RAW_BASE = 'https://raw.githubusercontent.com/Gilgamesh84/novocura-landing
 const qs = new URLSearchParams(location.search);
 const BASE = qs.get('base') || RAW_BASE;
 const stage = document.getElementById('stage');
+const panel = document.getElementById('panel');
 let currentFile = 'index.html';
-let scriptsStore = [];   // script outerHTML, restored on export
+let scriptsStore = [];
+let selected = null;       // element in the iframe currently being styled
+let moveArmed = false;
+let moving = null;         // element being relocated
+let dropTarget = null;     // {anchor, before}
 
 function toast(msg, ms){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'), ms||3400); }
+const $ = id => document.getElementById(id);
 
 /* ————— load a page into the editing stage ————— */
 async function loadPage(file){
   currentFile = file;
-  document.getElementById('loading').style.display='flex';
-  document.getElementById('errbox').style.display='none';
+  deselect();
+  $('loading').style.display='flex';
+  $('errbox').style.display='none';
   try{
     const res = await fetch(BASE + file, {cache:'no-store'});
     if(!res.ok) throw new Error('HTTP '+res.status);
-    const html = await res.text();
-    mountHtml(html);
+    mountHtml(await res.text());
   }catch(e){
-    document.getElementById('loading').style.display='none';
-    document.getElementById('errbox').style.display='flex';
+    $('loading').style.display='none';
+    $('errbox').style.display='flex';
   }
 }
-document.getElementById('btnLoadPaste').addEventListener('click', ()=>{
-  const v = document.getElementById('pasteBox').value.trim();
+$('btnLoadPaste').addEventListener('click', ()=>{
+  const v = $('pasteBox').value.trim();
   if(v.indexOf('<html') === -1){ toast('That does not look like the page code — copy the whole thing.'); return; }
-  document.getElementById('errbox').style.display='none';
+  $('errbox').style.display='none';
   mountHtml(v);
 });
 
-/* Strip <script> tags (animations pause while editing) and park them as placeholder
-   comments so they can be restored exactly on export. Then render into the iframe. */
 function mountHtml(html){
   const parsed = new DOMParser().parseFromString(html, 'text/html');
   scriptsStore = [];
@@ -107,7 +178,6 @@ function mountHtml(html){
     scriptsStore.push(s.outerHTML);
     s.replaceWith(parsed.createComment('nvx-script-'+(scriptsStore.length-1)));
   });
-  // make sure nothing stays hidden that animations would normally reveal
   const fix = parsed.createElement('style');
   fix.className = 'nvx';
   fix.textContent = '.reveal,.jbadge,.jtext{opacity:1 !important;transform:none !important}'
@@ -120,30 +190,108 @@ function mountHtml(html){
 
 stage.addEventListener('load', ()=>{
   const doc = stage.contentDocument;
-  if(!doc || !doc.body) return;
-  document.getElementById('loading').style.display='none';
+  if(!doc || !doc.body || !doc.body.children.length) return;
+  $('loading').style.display='none';
   initEditing(doc);
+});
+
+/* ————— selection + inspector ————— */
+function rgbToHex(s){
+  const m = s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if(!m) return '#3A4A40';
+  return '#'+[m[1],m[2],m[3]].map(n=>(+n).toString(16).padStart(2,'0')).join('');
+}
+function describe(el){
+  const tag = el.tagName.toLowerCase();
+  const txt = (el.textContent||'').trim().replace(/\s+/g,' ').slice(0,34);
+  return tag + ' · “' + txt + (txt.length>=34?'…':'') + '”';
+}
+function select(el){
+  deselect();
+  selected = el;
+  el.classList.add('nvx-sel');
+  panel.classList.remove('disabled');
+  $('pWho').textContent = describe(el);
+  const cs = stage.contentWindow.getComputedStyle(el);
+  const ff = cs.fontFamily;
+  $('pFont').value = ff.indexOf('Cormorant')>-1 ? "'Cormorant Garamond',serif"
+    : ff.indexOf('Montserrat')>-1 ? "'Montserrat',sans-serif"
+    : ff.indexOf('Georgia')>-1 ? "Georgia,'Times New Roman',serif"
+    : (ff.indexOf('Arial')>-1||ff.indexOf('Helvetica')>-1) ? 'Arial,Helvetica,sans-serif' : '';
+  $('pSize').value  = parseFloat(cs.fontSize).toFixed(1);
+  $('pLead').value  = (parseFloat(cs.lineHeight)/parseFloat(cs.fontSize)).toFixed(2);
+  $('pTrack').value = cs.letterSpacing==='normal' ? 0 : parseFloat(cs.letterSpacing);
+  $('pWeight').value = ['300','400','500','600'].includes(cs.fontWeight) ? cs.fontWeight : '';
+  $('pItalic').checked = cs.fontStyle==='italic';
+  $('pCaps').checked   = cs.textTransform==='uppercase';
+  $('pColor').value = rgbToHex(cs.color);
+  document.querySelectorAll('.alignbtns button').forEach(b=>b.classList.toggle('on', cs.textAlign===b.dataset.a || (b.dataset.a==='left'&&cs.textAlign==='start')));
+}
+function deselect(){
+  if(selected) selected.classList.remove('nvx-sel');
+  selected = null; moveArmed = false; moving = null; dropTarget = null;
+  $('pMove').classList.remove('armed'); $('pMove').textContent='✥ Move this block';
+  panel.classList.add('disabled');
+  $('pWho').textContent = 'click a text block on the page…';
+}
+/* inspector inputs → live style */
+$('pFont').addEventListener('input', e=>{ if(selected) selected.style.fontFamily = e.target.value; });
+$('pSize').addEventListener('input', e=>{ if(selected && e.target.value) selected.style.fontSize = e.target.value+'px'; });
+$('pLead').addEventListener('input', e=>{ if(selected && e.target.value) selected.style.lineHeight = e.target.value; });
+$('pTrack').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.letterSpacing = e.target.value+'px'; });
+$('pWeight').addEventListener('input', e=>{ if(selected) selected.style.fontWeight = e.target.value; });
+$('pItalic').addEventListener('change', e=>{ if(selected) selected.style.fontStyle = e.target.checked?'italic':''; });
+$('pCaps').addEventListener('change', e=>{ if(selected) selected.style.textTransform = e.target.checked?'uppercase':''; });
+$('pColor').addEventListener('input', e=>{ if(selected) selected.style.color = e.target.value; });
+document.querySelectorAll('.alignbtns button').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    if(!selected) return;
+    selected.style.textAlign = b.dataset.a;
+    document.querySelectorAll('.alignbtns button').forEach(x=>x.classList.toggle('on', x===b));
+  });
+});
+$('pReset').addEventListener('click', ()=>{
+  if(!selected) return;
+  selected.removeAttribute('style');
+  select(selected);
+  toast('Styling reset to the original design.');
+});
+$('pMove').addEventListener('click', ()=>{
+  if(!selected) return;
+  if(selected.closest('.stage-pin') || selected.closest('header') || selected.closest('footer .links')){
+    toast('This piece is pinned in place by the design — tell Kimi where you want it and I will move it safely.');
+    return;
+  }
+  moveArmed = !moveArmed;
+  $('pMove').classList.toggle('armed', moveArmed);
+  $('pMove').textContent = moveArmed ? '✥ Moving… drag the block now' : '✥ Move this block';
+  if(moveArmed){
+    selected.setAttribute('draggable','true');
+    toast('Drag the block (it has the solid outline) and drop it before or after another block.', 5200);
+  }else{
+    selected.removeAttribute('draggable');
+  }
 });
 
 /* ————— turn the page into an editor ————— */
 function initEditing(doc){
-  // 1. editing styles
   const st = doc.createElement('style');
   st.className = 'nvx';
   st.textContent =
     '[contenteditable]{outline:none;cursor:text;caret-color:#B08D57}'
     + '[contenteditable]:hover{outline:1.5px dashed rgba(176,141,87,.85);outline-offset:3px}'
     + '[contenteditable]:focus{outline:2px solid rgba(176,141,87,.9);outline-offset:3px;background:rgba(176,141,87,.07)}'
+    + '.nvx-sel{outline:2.5px solid #B08D57 !important;outline-offset:4px}'
     + '.nvx-handle{position:absolute;top:4px;right:6px;z-index:60;cursor:grab;color:#B08D57;font-size:16px;'
     + 'line-height:1;user-select:none;-webkit-user-select:none;font-family:monospace;padding:3px}'
     + '.nvx-handle:active{cursor:grabbing}'
     + '.entry,.fact,.teach-item{position:relative}'
+    + '.nvx-marker{position:absolute;left:0;right:0;height:3px;background:#B08D57;z-index:300;pointer-events:none;border-radius:2px;box-shadow:0 0 8px rgba(176,141,87,.7)}'
     + '.nvx-toolbar{position:fixed;z-index:200;display:none;gap:4px;background:#1B2E23;border-radius:6px;padding:4px;box-shadow:0 6px 22px rgba(27,46,35,.35)}'
     + '.nvx-toolbar button{border:none;background:transparent;color:#F6F1E7;font-size:13px;padding:4px 10px;cursor:pointer;border-radius:4px}'
     + '.nvx-toolbar button:hover{background:rgba(246,241,231,.15)}';
   doc.head.appendChild(st);
 
-  // 2. make every "leaf" text element editable (elements with direct text, no block children)
   const BLOCK = {H1:1,H2:1,H3:1,H4:1,P:1,DIV:1,SECTION:1,UL:1,OL:1,LI:1,HEADER:1,FOOTER:1,FIGURE:1,FORM:1,NAV:1,TABLE:1,BLOCKQUOTE:1,SVG:1,SCRIPT:1,STYLE:1};
   const SKIP  = {SCRIPT:1,STYLE:1,SVG:1,IFRAME:1,NOSCRIPT:1};
   doc.querySelectorAll('body *').forEach(el=>{
@@ -153,17 +301,30 @@ function initEditing(doc){
       if(n.nodeType===3 && n.textContent.trim()) hasText=true;
       if(n.nodeType===1 && BLOCK[n.tagName]) hasBlockChild=true;
     });
-    if(hasText && !hasBlockChild){ el.setAttribute('contenteditable','true'); el.setAttribute('spellcheck','false'); }
+    if(hasText && !hasBlockChild && !(el.parentElement && el.parentElement.closest('[contenteditable]'))){
+      el.setAttribute('contenteditable','true'); el.setAttribute('spellcheck','false');
+    }
   });
 
-  // 3. links and buttons never navigate while editing
-  doc.addEventListener('click', e=>{ e.preventDefault(); });
+  doc.addEventListener('click', e=>{
+    e.preventDefault();
+    if(moveArmed) return;
+    const el = e.target.closest ? e.target.closest('[contenteditable]') : null;
+    if(el) select(el);
+  });
 
-  // 4. drag-to-reorder handles on repeating cards
+  /* pasting brings in plain words only — never stray formatting */
+  doc.addEventListener('paste', e=>{
+    e.preventDefault();
+    const t = (e.clipboardData || window.clipboardData).getData('text/plain');
+    doc.execCommand('insertText', false, t);
+  });
+
+  /* ——— drag-to-reorder handles on repeating cards ——— */
   const groups = new Set();
   ['.entries','.facts','ul.creds'].forEach(sel=>doc.querySelectorAll(sel).forEach(g=>groups.add(g)));
   doc.querySelectorAll('.teach-item').forEach(i=>groups.add(i.parentNode));
-  let dragged = null;
+  let draggedCard = null;
   groups.forEach(g=>{
     Array.from(g.children).forEach(card=>{
       if(!card.tagName || card.classList.contains('nvx')) return;
@@ -174,35 +335,83 @@ function initEditing(doc){
       card.appendChild(h);
       h.addEventListener('mousedown', ()=>{ card.setAttribute('draggable','true'); });
       doc.addEventListener('mouseup', ()=>{ card.removeAttribute('draggable'); });
-      card.addEventListener('dragstart', ()=>{ dragged=card; card.style.opacity='.35'; });
-      card.addEventListener('dragend', ()=>{ card.style.opacity=''; card.removeAttribute('draggable'); dragged=null; });
+      card.addEventListener('dragstart', ()=>{ if(moveArmed) return; draggedCard=card; card.style.opacity='.35'; });
+      card.addEventListener('dragend', ()=>{ card.style.opacity=''; card.removeAttribute('draggable'); draggedCard=null; });
     });
     g.addEventListener('dragover', ev=>{
       ev.preventDefault();
-      if(!dragged || dragged.parentNode!==g) return;
-      const sibs = Array.from(g.children).filter(c=>c!==dragged);
+      if(!draggedCard || draggedCard.parentNode!==g) return;
+      const sibs = Array.from(g.children).filter(c=>c!==draggedCard);
       let before = null;
       for(const c of sibs){
         const r = c.getBoundingClientRect();
         if(ev.clientY < r.top + r.height*.55 || (ev.clientY < r.bottom && ev.clientX < r.left + r.width/2)){ before=c; break; }
       }
-      if(before) g.insertBefore(dragged,before); else g.appendChild(dragged);
+      if(before) g.insertBefore(draggedCard,before); else g.appendChild(draggedCard);
     });
   });
 
-  // 5. double-click any image to replace it
+  /* ——— move mode: relocate the selected block anywhere sensible ——— */
+  const ANCHORS = 'h1,h2,h3,p,li,figure,figcaption,.pull,.cohort-note,.kicker,.hint,.entry,.fact,.teach-item,.sub,.note,.smallprint,.sig,.jtext,.narrow > div,.narrow > h2,.narrow > span';
+  const marker = doc.createElement('div');
+  marker.className = 'nvx nvx-marker';
+  marker.style.display = 'none';
+  doc.body.appendChild(marker);
+
+  function findAnchor(t){
+    if(!t || !t.closest) return null;
+    let el = t.closest(ANCHORS);
+    while(el){
+      if(el!==moving && !el.contains(moving) && !moving.contains(el)
+         && !el.closest('.stage-pin') && !el.closest('header') && !el.closest('footer .links')
+         && !el.classList.contains('nvx')){
+        if(el.tagName==='LI' && moving.tagName!=='LI') return null;   // only list items among list items
+        if(moving.tagName==='LI' && el.tagName!=='LI') return null;
+        return el;
+      }
+      el = el.parentElement ? el.parentElement.closest(ANCHORS) : null;
+    }
+    return null;
+  }
+  doc.addEventListener('dragstart', e=>{
+    if(moveArmed && selected && e.target===selected){ moving = selected; moving.style.opacity='.4'; }
+  });
+  doc.addEventListener('dragover', e=>{
+    if(!moveArmed || !moving) return;
+    e.preventDefault();
+    const a = findAnchor(e.target);
+    if(!a){ marker.style.display='none'; dropTarget=null; return; }
+    const r = a.getBoundingClientRect();
+    const before = e.clientY < r.top + r.height/2;
+    dropTarget = {anchor:a, before:before};
+    const win = stage.contentWindow;
+    marker.style.display='block';
+    marker.style.top = (before ? r.top : r.bottom) + win.scrollY - 1 + 'px';
+    marker.style.left = (r.left + win.scrollX) + 'px';
+    marker.style.right = 'auto';
+    marker.style.width = r.width + 'px';
+  });
+  doc.addEventListener('drop', e=>{
+    if(!moveArmed || !moving || !dropTarget) return;
+    e.preventDefault();
+    const a = dropTarget.anchor;
+    if(dropTarget.before) a.parentNode.insertBefore(moving, a);
+    else a.parentNode.insertBefore(moving, a.nextSibling);
+    endMove(doc, marker, true);
+  });
+  doc.addEventListener('dragend', ()=>{ if(moveArmed && moving) endMove(doc, marker, false); });
+
   doc.addEventListener('dblclick', e=>{
     if(e.target.tagName==='IMG'){ window.parent.nvxPickImage(e.target); }
   });
 
-  // 6. floating Bold / Italic / Clear toolbar on text selection
   const tb = doc.createElement('div');
   tb.className = 'nvx nvx-toolbar';
   tb.innerHTML = '<button data-c="bold"><b>B</b></button><button data-c="italic"><i>I</i></button><button data-c="removeFormat">✕</button>';
   doc.body.appendChild(tb);
   tb.querySelectorAll('button').forEach(b=>{
     b.addEventListener('mousedown', e=>{
-      e.preventDefault();               // keep the selection alive
+      e.preventDefault();
       doc.execCommand(b.dataset.c,false,null);
     });
   });
@@ -216,10 +425,17 @@ function initEditing(doc){
     }else{ tb.style.display='none'; }
   });
 }
+function endMove(doc, marker, moved){
+  if(moving){ moving.style.opacity=''; moving.removeAttribute('draggable'); }
+  marker.style.display='none';
+  moving = null; dropTarget = null; moveArmed = false;
+  $('pMove').classList.remove('armed'); $('pMove').textContent='✥ Move this block';
+  if(moved) toast('Block moved. Download the updated file when you are happy with everything.');
+}
 
 /* ————— image replacement (runs in the parent window) ————— */
 window.nvxPickImage = function(imgEl){
-  let inp = document.getElementById('nvxFile');
+  let inp = $('nvxFile');
   if(!inp){
     inp = document.createElement('input');
     inp.type='file'; inp.accept='image/*'; inp.id='nvxFile'; inp.style.display='none';
@@ -236,22 +452,19 @@ window.nvxPickImage = function(imgEl){
   inp.click();
 };
 
-/* ————— export: clean editor marks, restore scripts, hand back a perfect file ————— */
+/* ————— export: clean editor marks, keep your styling, restore scripts ————— */
 function serialize(){
   const doc = stage.contentDocument;
   const c = doc.cloneNode(true);
-  // strip editor UI + editing attributes
   c.querySelectorAll('.nvx').forEach(n=>n.remove());
+  c.querySelectorAll('.nvx-sel').forEach(n=>{ n.classList.remove('nvx-sel'); if(!n.getAttribute('class')) n.removeAttribute('class'); });
   ['contenteditable','spellcheck','draggable'].forEach(a=>c.querySelectorAll('['+a+']').forEach(n=>n.removeAttribute(a)));
-  // the original page carries no inline styles — drop any the editor session introduced
-  c.querySelectorAll('body [style]').forEach(n=>n.removeAttribute('style'));
   let out = '<!DOCTYPE html>\n' + c.documentElement.outerHTML;
-  // restore parked scripts
   scriptsStore.forEach((s,i)=>{ out = out.replace('<!--nvx-script-'+i+'-->', s); });
   return out;
 }
 
-document.getElementById('btnExport').addEventListener('click', ()=>{
+$('btnExport').addEventListener('click', ()=>{
   const blob = new Blob([serialize()], {type:'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -260,14 +473,14 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
   setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
   toast('Downloaded '+currentFile+' — send it to Kimi, or paste it over the same file on GitHub (file → pencil → select all → paste → Commit).', 7000);
 });
-document.getElementById('btnCopy').addEventListener('click', async ()=>{
+$('btnCopy').addEventListener('click', async ()=>{
   try{ await navigator.clipboard.writeText(serialize()); toast('Copied. On GitHub: open '+currentFile+' → pencil → select all → paste → Commit changes.', 6000); }
   catch(e){ toast('Copy was blocked by the browser — use Download instead.'); }
 });
-document.getElementById('btnReset').addEventListener('click', ()=>{
+$('btnReset').addEventListener('click', ()=>{
   if(confirm('Start over? Every change you made on this page will be lost.')) loadPage(currentFile);
 });
-document.getElementById('seg').addEventListener('click', e=>{
+$('seg').addEventListener('click', e=>{
   const b = e.target.closest('button'); if(!b || b.classList.contains('on')) return;
   if(!confirm('Switch language? Unsaved changes on this page will be lost.')) return;
   document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on', x===b));
