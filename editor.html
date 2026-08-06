@@ -13,7 +13,7 @@
   .bar{display:flex;align-items:center;gap:14px;padding:10px 18px;background:var(--forest-deep);color:var(--parchment);flex-wrap:wrap}
   .brand{font-size:14px;letter-spacing:2px;text-transform:uppercase}
   .brand b{color:var(--brass);font-weight:600}
-  .seg{display:flex;background:rgba(246,241,231,.12);border-radius:999px;padding:3px}
+  .seg{display:flex;flex-wrap:wrap;gap:2px;background:rgba(246,241,231,.12);border-radius:14px;padding:3px;max-width:56vw}
   .seg button{border:none;background:transparent;color:rgba(246,241,231,.7);font-size:12px;padding:6px 14px;border-radius:999px;cursor:pointer;letter-spacing:.5px}
   .seg button.on{background:var(--brass);color:var(--forest-deep);font-weight:600}
   .spacer{flex:1}
@@ -65,8 +65,14 @@
 <div class="bar">
   <div class="brand">NOVOCURA <b>· Site Editor</b></div>
   <div class="seg" id="seg">
-    <button data-page="index.html" class="on">Türkçe</button>
-    <button data-page="en.html">English</button>
+    <button data-page="index.html" class="on">TR · Ana sayfa</button>
+    <button data-page="en.html">EN · Homepage</button>
+    <button data-page="homeopati-nedir.html">TR · Homeopati nedir?</button>
+    <button data-page="what-is-homeopathy.html">EN · What is homeopathy?</button>
+    <button data-page="makaleler.html">TR · Makaleler</button>
+    <button data-page="articles.html">EN · Articles</button>
+    <button data-page="hakkimda.html">TR · Hakkımda</button>
+    <button data-page="about.html">EN · About</button>
   </div>
   <div class="spacer"></div>
   <button class="btn" id="btnReset">↺ Start over</button>
