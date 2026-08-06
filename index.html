@@ -168,16 +168,15 @@
   .journal .kicker{color:var(--sage)}
   .journal h2{color:var(--parchment);font-size:clamp(28px,3.2vw,40px);margin:22px 0 14px}
   .journal .note{font-size:13px;color:var(--sage);letter-spacing:1px;margin-bottom:56px}
-  .entries{display:grid;grid-template-columns:repeat(3,1fr);gap:44px}
-  .entry{border-top:1px solid rgba(246,241,231,.22);padding-top:24px;transition:border-color .35s ease}
+  .entries{display:block;max-width:760px}
+  .entry{border-top:1px solid rgba(246,241,231,.22);padding:22px 0 20px;transition:border-color .35s ease}
+  .entries .group-note{font-size:10px;letter-spacing:2.5px;color:var(--sage);text-transform:uppercase;margin:48px 0 6px}
     .entries a.entry{display:block;text-decoration:none;color:inherit}
     .entries a.entry:hover{border-color:var(--brass)}
     .entry .read-more{display:inline-block;margin-top:14px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;color:var(--brass);text-transform:uppercase}
-  .entry:hover{border-color:var(--brass)}
   .entry .lang{font-size:10px;letter-spacing:2.5px;color:var(--brass);text-transform:uppercase;margin-bottom:14px}
-  .entry h3{color:var(--parchment);font-size:21px;line-height:1.35;margin-bottom:12px;font-weight:500}
-  .entry p{font-size:13px;line-height:1.85;color:rgba(246,241,231,.62)}
-  @media (max-width:820px){ .entries{grid-template-columns:1fr} }
+  .entry h3{color:var(--parchment);font-size:20px;line-height:1.35;margin-bottom:8px;font-weight:500}
+  .entry p{font-size:13px;line-height:1.85;color:rgba(246,241,231,.62);max-width:62ch}
   /* ————— closing ————— */
   .closing{min-height:86vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:30px;padding:0 8vw}
   .closing p{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3vw,36px);color:var(--forest-deep);max-width:20em;line-height:1.42;font-style:italic}
@@ -346,23 +345,38 @@
 <section class="block journal" id="makaleler">
   <div class="wrap">
     <span class="kicker reveal">Makaleler</span>
-    <h2 class="reveal">Uygulamadan notlar</h2>
-    <div class="note reveal">Tüm yazılar Türkçe ve İngilizce hazırlanır</div>
     <div class="entries">
-      
-      <a class="entry reveal" href="homeopati-nedir.html#pratigim" data-page-link="homeopati-nedir.html#pratigim" style="">
-        <div class="lang">iyileşme krizi şart mı?</div>
-        <h3 class="">İyileşme krizi nasıl olur ve nasıl engellenir?</h3>
-        <p class="">Bu ilkelerin Novocura'da günlük pratiğe nasıl dönüştüğü üzerine.</p>
-        <span class="read-more">Okuyun →</span>
-      </a><a class="entry reveal" href="homeopati-nedir.html" data-page-link="homeopati-nedir.html" style="">
-        <div class="lang">YAPISAL REMEDİ MİTİ</div>
+      <div class="entry reveal">
+        <h3>İyileşme krizi nasıl olur ve nasıl engellenir?</h3>
+        <p>Kısa açıklama buraya — bir iki cümle yeterli.</p>
+      </div>
+      <a class="entry reveal" href="homeopati-nedir.html" data-page-link="homeopati-nedir.html">
         <h3>Homeopati nedir? — benzerler yasası ve "yapay hastalık"</h3>
         <p>Hahnemann'ın iki yüzyıl önce ortaya koyduğu çerçeve, tarafsız ve öz biçimde.</p>
         <span class="read-more">Okuyun →</span>
       </a>
+      <div class="entry reveal">
+        <h3>Yapısal remedi miti</h3>
+        <p>Kısa açıklama buraya — bir iki cümle yeterli.</p>
+      </div>
+      <div class="entry reveal">
+        <h3>Zor çocuklar</h3>
+        <p>Kısa açıklama buraya — bir iki cümle yeterli.</p>
+      </div>
+      <div class="group-note reveal">Sırada — yakında</div>
+      <div class="entry reveal">
+        <h3>Yeni makale başlığı</h3>
+        <p>Kısa açıklama buraya — bir iki cümle yeterli.</p>
+      </div>
+      <div class="entry reveal">
+        <h3>Yeni makale başlığı</h3>
+        <p>Kısa açıklama buraya — bir iki cümle yeterli.</p>
+      </div>
+      <div class="entry reveal">
+        <h3>Yeni makale başlığı</h3>
+        <p>Kısa açıklama buraya — bir iki cümle yeterli.</p>
+      </div>
       <a class="entry reveal" href="makaleler.html" data-page-link="makaleler.html">
-        <div class="lang">zor çocuklar</div>
         <h3>Tüm makaleler</h3>
         <p>Yayımlanmış bütün yazılar tek sayfada — her ay yenileri eklenir.</p>
         <span class="read-more">Arşive gidin →</span>
