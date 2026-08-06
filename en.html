@@ -107,48 +107,53 @@
   .stage-intro h2{font-size:clamp(32px,4.4vw,54px);line-height:1.16;max-width:15em}
   .stage-intro .hint{font-size:11px;letter-spacing:2px;color:#93A295;animation:breathe 3.4s ease-in-out infinite}
   .stage-section{position:relative;background:var(--parchment)}
-  .stage-pin{height:100vh;position:relative;overflow:hidden}
-  /* — the winding journey path — */
-  svg.journey-path{position:absolute;inset:0;width:100%;height:100%}
+  /* — static layout (default; also what the editor sees): a calm vertical stack — */
+  .stage-pin{position:relative;max-width:860px;margin:0 auto;padding:10vh 6vw 12vh;display:flex;flex-direction:column;gap:60px}
+  svg.journey-path{display:none}
+  .jstep{display:flex;align-items:flex-start;gap:24px}
+  .jtext{flex:1;min-width:0}
+  .progress,.progress-label{display:none}
+  /* — pinned animated layout (applies only when the animation layer is active) — */
+  body.anim .stage-pin{height:100vh;max-width:none;margin:0;padding:0;display:block;overflow:hidden}
+  body.anim svg.journey-path{display:block;position:absolute;inset:0;width:100%;height:100%}
   svg.journey-path path{fill:none;stroke:var(--forest);stroke-width:1.6;stroke-linecap:round;opacity:.5}
   /* — numbered stations — */
-  .jstep{position:absolute;transform:translate(-50%,-50%);z-index:2}
-  .jbadge{width:76px;height:76px;border-radius:50%;background:var(--brass);
+  body.anim .jstep{display:block;position:absolute;transform:translate(-50%,-50%);z-index:2}
+  .jbadge{width:76px;height:76px;border-radius:50%;background:var(--brass);flex:none;
     display:flex;align-items:center;justify-content:center;
     box-shadow:0 10px 30px rgba(44,74,59,.18)}
   body.anim .jbadge{opacity:0}
   .jbadge span{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:36px;
     color:var(--parchment);line-height:1;padding-top:3px;font-variant-numeric:lining-nums}
-  .jtext{position:absolute;top:50%;transform:translateY(-50%);width:215px}
-  body.anim .jtext{opacity:0}
-  .jstep.tx-r .jtext{left:calc(100% + 30px)}
-  .jstep.tx-l .jtext{right:calc(100% + 30px);text-align:right}
+  body.anim .jtext{position:absolute;top:50%;transform:translateY(-50%);width:215px;flex:none;opacity:0}
+  body.anim .jstep.tx-r .jtext{left:calc(100% + 30px)}
+  body.anim .jstep.tx-l .jtext{right:calc(100% + 30px);text-align:right}
   .jtext .num{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:3px;color:var(--brass);
     margin-bottom:10px;font-variant-numeric:lining-nums}
   .jtext h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(21px,1.9vw,27px);
     color:var(--forest-deep);margin-bottom:12px;line-height:1.18}
   .jtext p{font-size:13px;line-height:1.8;color:var(--ink)}
   /* — station placement (mirrors the path's serpentine) — */
-  .js1{left:38%;top:19%} .js2{left:62%;top:40%} .js3{left:38%;top:61%} .js4{left:62%;top:82%}
-  .js1 .jtext{top:calc(50% + 22px)}
-  .js4 .jtext{top:calc(50% - 22px)}
-  .progress{position:absolute;left:6vw;bottom:8vh;width:180px;height:1px;background:var(--sand)}
+  body.anim .js1{left:38%;top:19%} body.anim .js2{left:62%;top:40%} body.anim .js3{left:38%;top:61%} body.anim .js4{left:62%;top:82%}
+  body.anim .js1 .jtext{top:calc(50% + 22px)}
+  body.anim .js4 .jtext{top:calc(50% - 22px)}
+  body.anim .progress{display:block;position:absolute;left:6vw;bottom:8vh;width:180px;height:1px;background:var(--sand)}
   .progress .bar{height:100%;width:0%;background:var(--brass)}
-  .progress-label{position:absolute;left:6vw;bottom:calc(8vh + 12px);font-size:10px;letter-spacing:3px;color:#8A988C;text-transform:uppercase}
+  body.anim .progress-label{display:block;position:absolute;left:6vw;bottom:calc(8vh + 12px);font-size:10px;letter-spacing:3px;color:#8A988C;text-transform:uppercase}
   @media (max-width:820px){
-    .js1{left:26%;top:16%} .js2{left:26%;top:38%} .js3{left:26%;top:61%} .js4{left:26%;top:84%}
-    .jstep.js1 .jtext{top:calc(50% + 30px)}
-    .jstep.js4 .jtext{top:calc(50% - 20px)}
+    body.anim .js1{left:26%;top:16%} body.anim .js2{left:26%;top:38%} body.anim .js3{left:26%;top:61%} body.anim .js4{left:26%;top:84%}
+    body.anim .jstep.js1 .jtext{top:calc(50% + 30px)}
+    body.anim .jstep.js4 .jtext{top:calc(50% - 20px)}
     .jbadge{width:56px;height:56px}
     .jbadge span{font-size:26px}
-    .jstep.tx-r .jtext,.jstep.tx-l .jtext{left:calc(100% + 18px);right:auto;top:50%;transform:translateY(-50%);width:56vw;text-align:left}
+    body.anim .jstep.tx-r .jtext,body.anim .jstep.tx-l .jtext{left:calc(100% + 18px);right:auto;top:50%;transform:translateY(-50%);width:56vw;text-align:left}
     .jtext h3{font-size:19px;margin-bottom:7px}
     .jtext p{font-size:11.5px;line-height:1.65}
     .jtext .num{font-size:12px;margin-bottom:6px}
-    .progress-label{display:none}
-    .progress{left:5vw;bottom:6vh}
+    body.anim .progress-label{display:none}
+    body.anim .progress{left:5vw;bottom:6vh}
   }
-  /* ————— practical ————— */
+/* ————— practical ————— */
   .practical .wrap{max-width:1100px;margin:0 auto}
   .practical h2{font-size:clamp(28px,3.2vw,40px);margin:22px 0 60px}
   .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
@@ -305,44 +310,6 @@
     <div class="progress"><div class="bar" id="progressBar"></div></div>
   </div>
 </section>
-<section class="block practical" id="sessions">
-  <div class="wrap">
-    <span class="kicker reveal">Sessions</span>
-    <h2 class="reveal">Before you book</h2>
-    <div class="facts">
-      <div class="fact reveal">
-        <div class="n">WHERE</div>
-        <h3>Edinburgh, and online</h3>
-        <p>Consultations take place in a quiet room in Edinburgh, or by video call if you live further afield. The conversation is the same either way.</p>
-      </div>
-      <div class="fact reveal">
-        <div class="n">HOW LONG</div>
-        <h3>Ninety minutes, first time</h3>
-        <p>First consultations run to ninety minutes; follow-ups take sixty to seventy-five minutes. You will never be asked to compress your story into a ten-minute slot.</p>
-      </div>
-      <div class="fact reveal">
-        <div class="n">HOW IT WORKS</div>
-        <h3>Alongside your doctor</h3>
-        <p>Homeopathy at Novocura is complementary care. Hande will always encourage you to keep your GP and specialists informed, and never to stop prescribed treatment.</p>
-      </div>
-      <div class="fact reveal">
-        <div class="n">FOLLOW-UP</div>
-        <h3>In touch every two weeks</h3>
-        <p>Between appointments, a short check-in over WhatsApp every two weeks — and support between sessions in acute situations. You are not left on your own.</p>
-      </div>
-      <div class="fact reveal">
-        <div class="n">THE PROCESS</div>
-        <h3>Each session re-takes the case</h3>
-        <p>Follow-up consultations usually take place every six to seven weeks. An average process runs four to five sessions over seven to eight months — as the vital force shifts, the work follows.</p>
-      </div>
-      <div class="fact reveal">
-        <div class="n">FEES</div>
-        <h3>Write for details</h3>
-        <p>Fees are not listed on this page. Concessions are available for students, retirees, lower-income clients and families — write for details.</p>
-      </div>
-    </div>
-  </div>
-</section>
 <section class="block teaching" id="teaching">
   <div class="wrap">
     <div>
@@ -369,6 +336,12 @@
         <p>One-to-one guidance for homeopaths who intend to practise for decades — casework, judgment, and the unglamorous disciplines that make a practice last.</p>
       </div>
     </div>
+  </div>
+</section>
+<section class="block practical" id="sessions">
+  <div class="wrap">
+    <span class="kicker reveal">Sessions</span>
+    <h2 class="reveal"><a href="booking.html" data-page-link="booking.html" style="color:inherit;text-decoration:none;border-bottom:2px solid var(--brass);padding-bottom:8px">Before you book</a></h2>
   </div>
 </section>
 <section class="block journal" id="makaleler">
