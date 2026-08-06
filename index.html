@@ -423,17 +423,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/* CDN fallbacks — if cdnjs is unreachable, try jsDelivr before giving up on animation */
-if (!window.gsap) document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"><\/script>');
-</script>
-<script>
-if (window.gsap && !window.ScrollTrigger) document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"><\/script>');
+/* CDN fallback — dynamic injection (document.write would wipe a fully parsed document) */
+(function(){
+  function load(src, done){ var s=document.createElement('script'); s.src=src; if(done) s.onload=done; document.head.appendChild(s); }
+  function ready(){ if (window.gsap && window.ScrollTrigger) startAll(); }
+  if (!window.gsap) {
+    load('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js', function(){
+      if (!window.ScrollTrigger) load('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', ready);
+      else ready();
+    });
+  } else if (!window.ScrollTrigger) {
+    load('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', ready);
+  }
+})();
 </script>
 <script>
 /* The site must stay fully readable even if the animation library never loads:
    content is hidden only when GSAP is confirmed present (body.anim). */
-const HAS_GSAP = !!(window.gsap && window.ScrollTrigger);
-if (HAS_GSAP) { gsap.registerPlugin(ScrollTrigger); document.body.classList.add('anim'); }
+function initAnimations() {
+if (!(window.gsap && window.ScrollTrigger)) return;
+gsap.registerPlugin(ScrollTrigger);
+document.body.classList.add('anim');
+}
 /* ——— 0. Header veil + light-on-dark over the journal (plain listener — pin spacers confuse triggers) ——— */
 const siteHeader = document.getElementById('siteHeader');
 const journalSec = document.querySelector('.journal');
@@ -463,7 +474,8 @@ document.querySelectorAll('[data-lang-link]').forEach(a => {
     }
   });
 });
-if (HAS_GSAP) {
+function runAnimations() {
+if (!(window.gsap && window.ScrollTrigger)) return;
 /* ——— 1. Hero entrance — a single, slow fade, staggered ——— */
 gsap.to('[data-hero]', {opacity: 1, y: 0, duration: 1.6, stagger: 0.35, ease: 'power2.out', delay: 0.3});
 gsap.set('[data-hero]', {y: 18});
@@ -529,6 +541,8 @@ gsap.utils.toArray('.jstep').forEach((step, i) => {
 });
 tl.to({}, {duration: 1.0}, 10);
 }
+function startAll(){ initAnimations(); runAnimations(); }
+startAll();
 </script>
 </body>
 </html>
