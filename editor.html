@@ -82,6 +82,7 @@
 <div class="howto">
   <span class="step"><b>1.</b> Click any text — type to change the words; the panel on the right changes its look.</span>
   <span class="step"><b>2.</b> <b>✥ Move</b> in the panel relocates a block · <kbd>⠿</kbd> handles reorder cards · double-click a picture to replace it.</span>
+  <span class="step"><b>+.</b> <b>Space above/below</b> adjusts gaps · <b>✦ Add element</b> inserts quote boxes, dividers, buttons, pictures.</span>
   <span class="step"><b>3.</b> Press <b>Download updated file</b> and send it to Kimi (or paste it over the file on GitHub).</span>
 </div>
 <div class="main">
@@ -109,6 +110,8 @@
     </div>
     <div class="row"><label>Size — px</label><input id="pSize" type="number" step="0.5" min="8" max="120"></div>
     <div class="row"><label>Leading (line spacing)</label><input id="pLead" type="number" step="0.05" min="0.8" max="3"></div>
+    <div class="row"><label>Space above — px</label><input id="pSpaceTop" type="number" step="2" min="-120" max="500"></div>
+    <div class="row"><label>Space below — px</label><input id="pSpaceBot" type="number" step="2" min="-120" max="500"></div>
     <div class="row"><label>Letter spacing — px</label><input id="pTrack" type="number" step="0.1" min="-3" max="20"></div>
     <div class="row">
       <label>Weight</label>
@@ -134,6 +137,26 @@
     <div class="btns">
       <button id="pMove">✥ Move this block</button>
       <button id="pReset">Reset this block's styling</button>
+    </div>
+    <h3 style="margin-top:22px">Add a design element</h3>
+    <div class="who">goes next to the block you clicked</div>
+    <div class="row"><label>Element</label>
+      <select id="addKind">
+        <option value="quote">❝ &nbsp;Pull-quote box (brass edge)</option>
+        <option value="divider">— &nbsp;Brass divider line</option>
+        <option value="spacer">↕ &nbsp;Empty space</option>
+        <option value="button">→ &nbsp;Button link</option>
+        <option value="image">▦ &nbsp;Picture</option>
+      </select>
+    </div>
+    <div class="row"><label>Position</label>
+      <select id="addWhere">
+        <option value="after">Below the selected block</option>
+        <option value="before">Above the selected block</option>
+      </select>
+    </div>
+    <div class="btns" style="margin-top:4px">
+      <button id="btnAdd" style="background:var(--forest-deep);color:var(--parchment);border:none">✦ Add element</button>
     </div>
     <p class="tip">Changes apply to the block you clicked. Nothing is saved until you press <b>Download updated file</b>.</p>
   </aside>
@@ -231,6 +254,8 @@ function select(el){
   $('pItalic').checked = cs.fontStyle==='italic';
   $('pCaps').checked   = cs.textTransform==='uppercase';
   $('pColor').value = rgbToHex(cs.color);
+  $('pSpaceTop').value = Math.round(parseFloat(cs.marginTop)||0);
+  $('pSpaceBot').value = Math.round(parseFloat(cs.marginBottom)||0);
   document.querySelectorAll('.alignbtns button').forEach(b=>b.classList.toggle('on', cs.textAlign===b.dataset.a || (b.dataset.a==='left'&&cs.textAlign==='start')));
 }
 function deselect(){
@@ -244,6 +269,8 @@ function deselect(){
 $('pFont').addEventListener('input', e=>{ if(selected) selected.style.fontFamily = e.target.value; });
 $('pSize').addEventListener('input', e=>{ if(selected && e.target.value) selected.style.fontSize = e.target.value+'px'; });
 $('pLead').addEventListener('input', e=>{ if(selected && e.target.value) selected.style.lineHeight = e.target.value; });
+$('pSpaceTop').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.marginTop = e.target.value+'px'; });
+$('pSpaceBot').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.marginBottom = e.target.value+'px'; });
 $('pTrack').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.letterSpacing = e.target.value+'px'; });
 $('pWeight').addEventListener('input', e=>{ if(selected) selected.style.fontWeight = e.target.value; });
 $('pItalic').addEventListener('change', e=>{ if(selected) selected.style.fontStyle = e.target.checked?'italic':''; });
@@ -439,6 +466,52 @@ function endMove(doc, marker, moved){
   if(moved) toast('Block moved. Download the updated file when you are happy with everything.');
 }
 
+/* ————— design element library — inserts next to the selected block ————— */
+$('btnAdd').addEventListener('click', ()=>{
+  const doc = stage.contentDocument;
+  if(!doc){ return; }
+  if(!selected){ toast('First click a block on the page — the new element goes next to it.'); return; }
+  if(selected.closest('header') || selected.closest('footer .links')){
+    toast('Elements cannot be added around the header or footer links.');
+    return;
+  }
+  const kind = $('addKind').value;
+  let html = '';
+  if(kind==='quote'){
+    html = '<div class="nvxel" style="border-left:2px solid #B08D57;padding:8px 0 8px 26px;margin:44px 0;font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:24px;line-height:1.55;color:#1B2E23"><p contenteditable="true" spellcheck="false" style="margin:0">Alıntınızı buraya yazın…</p></div>';
+  }else if(kind==='divider'){
+    html = '<div class="nvxel" style="border-top:1px solid #B08D57;width:130px;margin:52px auto"></div>';
+  }else if(kind==='spacer'){
+    const h = prompt('Boşluk yüksekliği — piksel (ör. 60):', '60');
+    if(h===null) return;
+    html = '<div class="nvxel" style="height:'+(parseInt(h)||60)+'px"></div>';
+  }else if(kind==='button'){
+    html = '<div class="nvxel" style="text-align:center;margin:48px 0"><a href="mailto:hello@novocura.co.uk" contenteditable="true" spellcheck="false" style="display:inline-block;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#B08D57;border:1px solid #B08D57;padding:15px 32px;border-radius:999px;text-decoration:none">Buton yazısı</a></div>';
+  }else if(kind==='image'){
+    html = '<figure class="nvxel" style="margin:48px 0;text-align:center"><img alt="" style="max-width:100%;height:auto;display:block;margin:0 auto"><figcaption contenteditable="true" spellcheck="false" style="margin-top:12px;font-size:12px;letter-spacing:1.5px;color:#6B7B6F;font-style:italic">İsteğe bağlı altyazı — silmek için metni boşaltın</figcaption></figure>';
+  }
+  const frag = doc.createElement('template');
+  frag.innerHTML = html.trim();
+  const el = frag.content.firstChild;
+  if($('addWhere').value==='before') selected.parentNode.insertBefore(el, selected);
+  else selected.parentNode.insertBefore(el, selected.nextSibling);
+
+  /* yeni bloklar da seçilebilsin (boşluk/ayraç gibi metinsiz olanlar dahil) */
+  if(!doc._nvxelBound){
+    doc.addEventListener('click', e=>{
+      const c = e.target.closest && e.target.closest('.nvxel');
+      if(c && !e.target.closest('[contenteditable]')){ select(c); }
+    });
+    doc._nvxelBound = true;
+  }
+
+  if(kind==='image'){
+    window.nvxPickImage(el.querySelector('img'));
+  }
+  select(el.querySelector('[contenteditable]') || el);
+  toast('Element added — edit the text, or use Space above/below to place it. Download the file when finished.', 5200);
+});
+
 /* ————— image replacement (runs in the parent window) ————— */
 window.nvxPickImage = function(imgEl){
   let inp = $('nvxFile');
@@ -464,6 +537,7 @@ function serialize(){
   const c = doc.cloneNode(true);
   c.querySelectorAll('.nvx').forEach(n=>n.remove());
   c.querySelectorAll('.nvx-sel').forEach(n=>{ n.classList.remove('nvx-sel'); if(!n.getAttribute('class')) n.removeAttribute('class'); });
+  c.querySelectorAll('.nvxel').forEach(n=>{ n.classList.remove('nvxel'); if(!n.getAttribute('class')) n.removeAttribute('class'); });
   ['contenteditable','spellcheck','draggable'].forEach(a=>c.querySelectorAll('['+a+']').forEach(n=>n.removeAttribute(a)));
   let out = '<!DOCTYPE html>\n' + c.documentElement.outerHTML;
   scriptsStore.forEach((s,i)=>{ out = out.replace('<!--nvx-script-'+i+'-->', s); });
