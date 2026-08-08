@@ -30,6 +30,9 @@
   .main{flex:1;display:flex;min-height:0}
   .wrap{flex:1;position:relative;background:#DDD5C2;min-width:0}
   iframe{position:absolute;inset:0;width:100%;height:100%;border:none;background:var(--parchment)}
+  .wrap.mobile iframe{width:390px;left:50%;transform:translateX(-50%);box-shadow:0 0 0 1px rgba(44,74,59,.35),0 24px 70px rgba(27,46,35,.3)}
+  .dims{display:flex;gap:8px}
+  .dims>div{flex:1}
   .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-soft);letter-spacing:1px}
   /* ——— inspector panel ——— */
   #panel{width:252px;background:var(--parchment);border-left:1px solid rgba(44,74,59,.15);padding:18px 16px;overflow-y:auto;flex-shrink:0}
@@ -76,6 +79,10 @@
     <button data-page="randevu.html">TR · Randevu</button>
     <button data-page="booking.html">EN · Booking</button>
   </div>
+  <div class="seg" id="vseg" title="Preview width">
+    <button data-vw="desktop" class="on">🖥 Desktop</button>
+    <button data-vw="mobile">📱 Mobile</button>
+  </div>
   <div class="spacer"></div>
   <button class="btn" id="btnReset">↺ Start over</button>
   <button class="btn" id="btnCopy">Copy the code</button>
@@ -83,7 +90,7 @@
 </div>
 <div class="howto">
   <span class="step"><b>1.</b> Click any text — type to change the words; the panel on the right changes its look.</span>
-  <span class="step"><b>2.</b> <b>✥ Move</b> in the panel relocates a block · <kbd>⠿</kbd> handles reorder cards · double-click a picture to replace it.</span>
+  <span class="step"><b>2.</b> <b>✥ Move</b> relocates a block · <kbd>⠿</kbd> reorders cards · click a picture to resize it, double-click to replace it · <b>📱 Mobile</b> above shows the phone view.</span>
   <span class="step"><b>+.</b> <b>Space above/below</b> adjusts gaps · <b>✦ Add element</b> inserts quote boxes, dividers, buttons, pictures.</span>
   <span class="step"><b>3.</b> Press <b>Download updated file</b> and send it to Kimi (or paste it over the file on GitHub).</span>
 </div>
@@ -114,6 +121,10 @@
     <div class="row"><label>Leading (line spacing)</label><input id="pLead" type="number" step="0.05" min="0.8" max="3"></div>
     <div class="row"><label>Space above — px</label><input id="pSpaceTop" type="number" step="2" min="-120" max="500"></div>
     <div class="row"><label>Space below — px</label><input id="pSpaceBot" type="number" step="2" min="-120" max="500"></div>
+    <div class="row dims">
+      <div><label>Width — px or %</label><input id="pW" type="text"></div>
+      <div><label>Height — px or %</label><input id="pH" type="text"></div>
+    </div>
     <div class="row"><label>Letter spacing — px</label><input id="pTrack" type="number" step="0.1" min="-3" max="20"></div>
     <div class="row">
       <label>Weight</label>
@@ -160,7 +171,7 @@
     <div class="btns" style="margin-top:4px">
       <button id="btnAdd" style="background:var(--forest-deep);color:var(--parchment);border:none">✦ Add element</button>
     </div>
-    <p class="tip">Changes apply to the block you clicked. Nothing is saved until you press <b>Download updated file</b>.</p>
+    <p class="tip">Changes apply to the block you clicked. Width/Height work on text boxes and pictures alike — for pictures, set only Width and leave Height empty so proportions stay true. Nothing is saved until you press <b>Download updated file</b>.</p>
   </aside>
 </div>
 <div id="toast"></div>
@@ -234,6 +245,7 @@ function rgbToHex(s){
 }
 function describe(el){
   const tag = el.tagName.toLowerCase();
+  if(tag==='img') return 'picture — set Width/Height below (leave Height empty to keep proportions)';
   const txt = (el.textContent||'').trim().replace(/\s+/g,' ').slice(0,34);
   return tag + ' · “' + txt + (txt.length>=34?'…':'') + '”';
 }
@@ -258,6 +270,11 @@ function select(el){
   $('pColor').value = rgbToHex(cs.color);
   $('pSpaceTop').value = Math.round(parseFloat(cs.marginTop)||0);
   $('pSpaceBot').value = Math.round(parseFloat(cs.marginBottom)||0);
+  $('pW').value = el.style.width || '';
+  $('pH').value = el.style.height || '';
+  const r0 = el.getBoundingClientRect();
+  $('pW').placeholder = 'now ~'+Math.round(r0.width)+'px';
+  $('pH').placeholder = 'now ~'+Math.round(r0.height)+'px';
   document.querySelectorAll('.alignbtns button').forEach(b=>b.classList.toggle('on', cs.textAlign===b.dataset.a || (b.dataset.a==='left'&&cs.textAlign==='start')));
 }
 function deselect(){
@@ -274,6 +291,9 @@ $('pLead').addEventListener('input', e=>{ if(selected && e.target.value) selecte
 $('pSpaceTop').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.marginTop = e.target.value+'px'; });
 $('pSpaceBot').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.marginBottom = e.target.value+'px'; });
 $('pTrack').addEventListener('input', e=>{ if(selected && e.target.value!=='') selected.style.letterSpacing = e.target.value+'px'; });
+function normDim(v){ v=(v||'').trim(); if(!v) return ''; if(/^\d+(\.\d+)?$/.test(v)) return v+'px'; return v; }
+$('pW').addEventListener('input', e=>{ if(selected) selected.style.width = normDim(e.target.value); });
+$('pH').addEventListener('input', e=>{ if(selected) selected.style.height = normDim(e.target.value); });
 $('pWeight').addEventListener('input', e=>{ if(selected) selected.style.fontWeight = e.target.value; });
 $('pItalic').addEventListener('change', e=>{ if(selected) selected.style.fontStyle = e.target.checked?'italic':''; });
 $('pCaps').addEventListener('change', e=>{ if(selected) selected.style.textTransform = e.target.checked?'uppercase':''; });
@@ -344,6 +364,7 @@ function initEditing(doc){
   doc.addEventListener('click', e=>{
     e.preventDefault();
     if(moveArmed) return;
+    if(e.target.tagName==='IMG'){ select(e.target); return; }
     const el = e.target.closest ? e.target.closest('[contenteditable]') : null;
     if(el) select(el);
   });
@@ -567,6 +588,12 @@ $('seg').addEventListener('click', e=>{
   if(!confirm('Switch language? Unsaved changes on this page will be lost.')) return;
   document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on', x===b));
   loadPage(b.dataset.page);
+});
+$('vseg').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#vseg button').forEach(x=>x.classList.toggle('on', x===b));
+  document.querySelector('.wrap').classList.toggle('mobile', b.dataset.vw==='mobile');
+  if(b.dataset.vw==='mobile') toast('Phone view — everything stays editable; this is exactly what mobile visitors see.', 4200);
 });
 
 loadPage(currentFile);
