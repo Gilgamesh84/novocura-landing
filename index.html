@@ -23,17 +23,17 @@
     padding:22px 5vw;transition:background .4s ease, box-shadow .4s ease}
   header.scrolled{background:rgba(246,241,231,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(44,74,59,.08)}
   header.scrolled.on-dark{background:rgba(27,46,35,.9);box-shadow:0 1px 0 rgba(246,241,231,.12)}
-  .wordmark{display:flex;line-height:0;position:absolute;left:50%;transform:translateX(-50%)}
+  .wordmark{display:flex;line-height:0}
   .wordmark img{height:42px;width:auto;display:block}
   .wordmark .logo-light{display:none}
-  nav{display:flex;gap:34px;align-items:center}
+  nav{display:flex;gap:34px;align-items:center;margin-left:auto}
   nav a{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink);text-decoration:none;font-weight:400;position:relative}
   nav a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--brass);transition:width .35s ease}
   nav a:hover::after{width:100%}
   nav a.book{color:var(--brass)}
   nav a.lang-switch{border:1px solid rgba(176,141,87,.55);border-radius:999px;padding:5px 12px 4px;color:var(--brass)}
+  nav a.home-btn::after{display:none}
   nav a.lang-switch::after{display:none}
-  nav a.lang-switch{position:absolute;right:5vw;top:50%;transform:translateY(-50%)}
   header.on-dark .wordmark .logo-dark{display:none}
   header.on-dark .wordmark .logo-light{display:block}
   header.on-dark nav a{color:rgba(246,241,231,.75)}
@@ -221,7 +221,7 @@
   .m-nav{display:none}
   @media (max-width:1100px){
     nav{margin-left:auto;gap:16px}
-    nav a{display:none}
+    nav a:not(.home-btn){display:none}
     /* hamburger menü (1100 altı) */
     nav{gap:16px}
     .m-burger{display:flex;flex-direction:column;justify-content:center;gap:6px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:8px 4px}
@@ -302,6 +302,7 @@
     <a href="randevu.html#seanslar" data-page-link="randevu.html#seanslar">Seanslar</a>
     <a href="#teaching">Eğitimler</a>
     <a href="makaleler.html" data-page-link="makaleler.html">Makaleler</a>
+    <a class="home-btn" href="#top" aria-label="Anasayfa" title="Anasayfa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg></a>
     <a class="lang-switch" href="en.html" data-lang-link="en.html">EN</a>
     <button class="m-burger" id="mBurger" aria-label="Menüyü aç"><span></span><span></span></button>
   </nav>
