@@ -242,7 +242,7 @@
     .m-nav{display:flex;position:fixed;inset:0;z-index:40;background:var(--forest-deep);flex-direction:column;justify-content:center;padding:0 10vw;opacity:0;pointer-events:none;transition:opacity .35s ease}
     .m-nav.open{opacity:1;pointer-events:auto}
     .m-nav .mnav-kicker{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:var(--brass);margin-bottom:30px}
-    .m-nav a{font-family:'Cormorant Garamond',serif;font-size:31px;color:var(--parchment);text-decoration:none;padding:14px 0;border-top:1px solid rgba(246,241,231,.14)}
+    .m-nav a{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--parchment);text-decoration:none;padding:9px 0;border-top:1px solid rgba(246,241,231,.14)}
     .m-nav a:last-of-type{border-bottom:1px solid rgba(246,241,231,.14)}
     .m-nav a em{font-style:normal;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;color:var(--brass);margin-right:16px;vertical-align:6px}
     /* kompakt logo bandı */
@@ -307,11 +307,11 @@
 </header>
 <div class="m-nav" id="mNav" role="navigation" aria-label="Mobil menü">
   <div class="mnav-kicker">Novocura · Menü</div>
-  <a href="#benkimim"><em>01</em>Hakkımda</a>
-  <a href="randevu.html#seanslar" data-page-link="randevu.html#seanslar"><em>02</em>Seanslar</a>
-  <a href="#teaching"><em>03</em>Eğitimler</a>
-  <a href="#makaleler"><em>04</em>Makaleler</a>
-  <a href="randevu.html" data-page-link="randevu.html"><em>05</em>Randevu</a>
+  <a href="#benkimim">Hakkımda</a>
+  <a href="randevu.html#seanslar" data-page-link="randevu.html#seanslar">Seanslar</a>
+  <a href="#teaching">Eğitimler</a>
+  <a href="#makaleler">Makaleler</a>
+  <a href="randevu.html" data-page-link="randevu.html">Randevu</a>
   <a href="en.html" data-lang-link="en.html"><em>EN</em>English</a>
 </div>
 <section class="hero" id="top">
@@ -416,14 +416,17 @@
 </section>
 <hr class="divider">
 <section class="block teaching" id="teaching">
-  <div class="wrap">
+  <div class="wrap" data-collapsible="">
     <div>
       <span class="kicker reveal">İleri düzey eğitim</span>
       <h2 class="reveal">Eğitim ve Süpervizyon</h2>
-      <p class="reveal">Hâlihazırda pratiğe başlamış homeopatlar ve öğrenciler için ileri düzey, vaka ve pratik temelli eğitimler.&nbsp;Organon, Organopati, Miyazma, Akut remediler, Dozajlama ve Potens konusunda seminerler. Vakalarının üzerinde detaylı çalışmak isteyen homeopatlar için bireysel ve grup süpervizyonları.</p>
+      <p class="reveal">Hâlihazırda pratiğe başlamış homeopatlar ve öğrenciler için ileri düzey, vaka ve pratik temelli eğitimler.&nbsp;Organon, Organopati, Miyazma, Akut remediler, Dozajlama ve Potens konusunda seminerler.<span class="m-hide">&nbsp;Vakalarının üzerinde detaylı çalışmak isteyen homeopatlar için bireysel ve grup süpervizyonları.</span></p>
+      <div class="m-hide">
       <p class="reveal">Bazı eğitimler düzenli olarak her ay açılır, bazıları dönemsel açılır. Bilgi için bana yazabilirsiniz.&nbsp;</p>
       <div class="cohort-note reveal">Süpervizyon ve Eğitimlere kayıt olmak için <a href="randevu.html#egitimler" data-page-link="randevu.html#egitimler">tıklayın</a>.</div>
+      </div>
     </div>
+    <button class="m-readmore" type="button">Devamını oku</button>
   </div>
 </section>
 <section class="block journal" id="makaleler">
