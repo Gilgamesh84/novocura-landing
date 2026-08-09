@@ -34,6 +34,7 @@
   nav a.lang-switch{border:1px solid rgba(176,141,87,.55);border-radius:999px;padding:5px 12px 4px;color:var(--brass)}
   nav a.home-btn::after{display:none}
   nav a.lang-switch::after{display:none}
+  nav a.lang-switch.on{background:var(--brass);border-color:var(--brass);color:var(--parchment)}
   header.on-dark .wordmark .logo-dark{display:none}
   header.on-dark .wordmark .logo-light{display:block}
   header.on-dark nav a{color:rgba(246,241,231,.75)}
@@ -306,7 +307,7 @@
     <a href="#teaching">Eğitimler</a>
     <a href="makaleler.html" data-page-link="makaleler.html">Makaleler</a>
     <a class="home-btn" href="#top" aria-label="Anasayfa" title="Anasayfa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path></svg></a>
-    <a class="lang-switch" href="en.html" data-lang-link="en.html">EN</a>
+    <a class="lang-switch" href="en.html" data-lang-link="en.html">EN</a><a class="lang-switch on" aria-current="true">TR</a>
     <button class="m-burger" id="mBurger" aria-label="Menüyü aç"><span></span><span></span></button>
   </nav>
 </header>
