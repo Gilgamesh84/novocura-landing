@@ -121,7 +121,7 @@
       <select id="pFont">
         <option value="">(as designed)</option>
         <option value="'Cormorant Garamond',serif">Cormorant Garamond · serif</option>
-        <option value="'Montserrat',sans-serif">Montserrat · sans</option>
+        <option value="'Libre Franklin',sans-serif">Libre Franklin · sans</option>
         <option value="Georgia,'Times New Roman',serif">Georgia · serif</option>
         <option value="Arial,Helvetica,sans-serif">Arial · sans</option>
       </select>
@@ -267,7 +267,7 @@ function select(el){
   const cs = stage.contentWindow.getComputedStyle(el);
   const ff = cs.fontFamily;
   $('pFont').value = ff.indexOf('Cormorant')>-1 ? "'Cormorant Garamond',serif"
-    : ff.indexOf('Montserrat')>-1 ? "'Montserrat',sans-serif"
+    : ff.indexOf('Libre Franklin')>-1 ? "'Libre Franklin',sans-serif"
     : ff.indexOf('Georgia')>-1 ? "Georgia,'Times New Roman',serif"
     : (ff.indexOf('Arial')>-1||ff.indexOf('Helvetica')>-1) ? 'Arial,Helvetica,sans-serif' : '';
   $('pSize').value  = parseFloat(cs.fontSize).toFixed(1);
@@ -510,17 +510,17 @@ $('btnAdd').addEventListener('click', ()=>{
   const kind = $('addKind').value;
   let html = '';
   if(kind==='quote'){
-    html = '<div class="nvxel" style="border-left:2px solid #B08D57;padding:8px 0 8px 26px;margin:44px 0;font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:24px;line-height:1.55;color:#1B2E23"><p contenteditable="true" spellcheck="false" style="margin:0">Alıntınızı buraya yazın…</p></div>';
+    html = '<div class="nvxel" style="border-left:2px solid var(--brass);padding:8px 0 8px 26px;margin:44px 0;font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:24px;line-height:1.55;color:var(--forest-deep)"><p contenteditable="true" spellcheck="false" style="margin:0">Alıntınızı buraya yazın…</p></div>';
   }else if(kind==='divider'){
-    html = '<div class="nvxel" style="border-top:1px solid #B08D57;width:130px;margin:52px auto"></div>';
+    html = '<div class="nvxel" style="border-top:1px solid var(--brass);width:130px;margin:52px auto"></div>';
   }else if(kind==='spacer'){
     const h = prompt('Boşluk yüksekliği — piksel (ör. 60):', '60');
     if(h===null) return;
     html = '<div class="nvxel" style="height:'+(parseInt(h)||60)+'px"></div>';
   }else if(kind==='button'){
-    html = '<div class="nvxel" style="text-align:center;margin:48px 0"><a href="mailto:hande@novocura.co.uk" contenteditable="true" spellcheck="false" style="display:inline-block;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#B08D57;border:1px solid #B08D57;padding:15px 32px;border-radius:999px;text-decoration:none">Buton yazısı</a></div>';
+    html = '<div class="nvxel" style="text-align:center;margin:48px 0"><a href="mailto:hande@novocura.co.uk" contenteditable="true" spellcheck="false" style="display:inline-block;font-family:\'Libre Franklin\',sans-serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brass-text);border:1px solid var(--brass);padding:15px 32px;border-radius:999px;text-decoration:none">Buton yazısı</a></div>';
   }else if(kind==='image'){
-    html = '<figure class="nvxel" style="margin:48px 0;text-align:center"><img alt="" style="max-width:100%;height:auto;display:block;margin:0 auto" loading="lazy"><figcaption contenteditable="true" spellcheck="false" style="margin-top:12px;font-size:12px;letter-spacing:1.5px;color:#6B7B6F;font-style:italic">İsteğe bağlı altyazı — silmek için metni boşaltın</figcaption></figure>';
+    html = '<figure class="nvxel" style="margin:48px 0;text-align:center"><img alt="" style="max-width:100%;height:auto;display:block;margin:0 auto" loading="lazy"><figcaption contenteditable="true" spellcheck="false" style="margin-top:12px;font-size:12px;letter-spacing:1.5px;color:var(--ink-soft);font-style:italic">İsteğe bağlı altyazı — silmek için metni boşaltın</figcaption></figure>';
   }
   const frag = doc.createElement('template');
   frag.innerHTML = html.trim();
