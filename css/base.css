@@ -2,6 +2,7 @@
     --forest:#2C4A3B; --forest-deep:#1B2E23; --parchment:#F6F1E7;
     --sand:#EAE2D0; --brass:#B08D57; --brass-text:#7A5C34; --sage:#C7D0BE; --ink:#3A4A40; --ink-soft:#556356;
     --rust:#9A4A2E; --rust-light:#C97456;
+    --ink-muted:#5A6A5C; --paper-raised:#FCF9F1;
   }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -60,7 +61,7 @@ nav a.lang-switch.on{background:var(--brass-text);border-color:var(--brass-text)
 
 footer .flogo{height:44px;width:auto;display:block}
 
-footer small{display:block;max-width:46em;font-size:10.5px;line-height:1.8;color:#5A6A5C;margin-top:12px}
+footer small{display:block;max-width:46em;font-size:11px;line-height:1.8;color:var(--ink-muted);margin-top:12px}
 
 footer .links{display:flex;gap:26px}
 
@@ -77,7 +78,7 @@ footer .links a:hover{color:var(--brass-text)}
   outline:2px solid var(--brass);outline-offset:2px;border-radius:2px;
 }
 
-.ferr{display:none;color:var(--rust);font-size:12.5px;line-height:1.5;margin-top:6px}
+.ferr{display:none;color:var(--rust);font-size:13px;line-height:1.5;margin-top:6px}
 
 .frow.invalid input,.frow.invalid textarea{border-bottom-color:var(--rust)}
 

@@ -17,14 +17,14 @@ nav{display:flex;gap:34px;align-items:center}
 
 .story-hero h1 em{font-style:normal;color:var(--forest)}
 
-.story-hero .sub{margin-top:28px;font-size:15.5px;letter-spacing:.3px;color:var(--ink-soft);line-height:1.6}
+.story-hero .sub{margin-top:28px;font-size:15px;letter-spacing:.3px;color:var(--ink-soft);line-height:1.6}
 
 /* ————— story body ————— */
   section.block{padding:10vh 6vw}
 
 .narrow{max-width:660px;margin:0 auto;position:relative}
 
-.narrow p{font-size:15.5px;line-height:2.05;margin-bottom:1.5em;color:var(--ink)}
+.narrow p{font-size:15px;line-height:2.05;margin-bottom:1.5em;color:var(--ink)}
 
 .narrow .sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;color:var(--forest);margin-top:2em}
 
@@ -49,7 +49,7 @@ nav{display:flex;gap:34px;align-items:center}
 
 .logo-strip a:hover img{filter:grayscale(0);opacity:1}
 
-.strip-note{margin-top:36px;font-size:13px;letter-spacing:.2px;color:#5A6A5C}
+.strip-note{margin-top:36px;font-size:13px;letter-spacing:.2px;color:var(--ink-muted)}
 
 @media (max-width:720px){.logo-strip{gap:34px}.logo-strip img{height:36px}}
 
