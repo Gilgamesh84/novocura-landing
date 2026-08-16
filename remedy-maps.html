@@ -6,98 +6,13 @@
 <title>Remedy Maps — Novocura</title>
 <meta name="description" content="Remedy maps and their counterpart in the Organon: remedies in succession and remedies that follow each other well in the light of Aphorisms 171–173, follow-up remedies, a centuries-old case literature and the art of reading what the vital force shows.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Montserrat:wght@300;400;500&amp;display=swap" rel="stylesheet">
-<style>
-  :root{
-    --forest:#2C4A3B; --forest-deep:#1B2E23; --parchment:#F6F1E7;
-    --sand:#EAE2D0; --brass:#B08D57; --sage:#C7D0BE; --ink:#3A4A40; --ink-soft:#6B7B6F;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--parchment);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-  ::selection{background:var(--sage);color:var(--forest-deep)}
-  h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;color:var(--forest-deep)}
-  .kicker{font-size:11px;letter-spacing:4px;color:var(--brass);text-transform:uppercase;font-weight:400}
-  /* ————— header ————— */
-  header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;justify-content:space-between;align-items:center;
-    padding:22px 5vw;transition:background .4s ease, box-shadow .4s ease}
-  header.scrolled{background:rgba(246,241,231,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(44,74,59,.08)}
-  .wordmark{display:flex;line-height:0}
-  .wordmark img{height:42px;width:auto;display:block}
-  nav{display:flex;gap:34px;align-items:center}
-  nav a{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink);text-decoration:none;font-weight:400;position:relative}
-  nav a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--brass);transition:width .35s ease}
-  nav a:hover::after{width:100%}
-  nav a.book{color:var(--brass)}
-  nav a.lang-switch{border:1px solid rgba(176,141,87,.55);border-radius:999px;padding:5px 12px 4px;color:var(--brass)}
-  nav a.lang-switch::after{display:none}
-  nav a.lang-switch.on{background:var(--brass);border-color:var(--brass);color:var(--parchment)}
-  nav a.home-btn::after{display:none}
-  @media (max-width:720px){
-    nav a:not(.book):not(.lang-switch):not(.home-btn){display:none}
-    .wordmark img{height:34px}
-  }
-  /* ————— story hero ————— */
-  .story-hero{min-height:78vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16vh 6vw 8vh;position:relative}
-  .story-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 60% 45% at 50% 42%, rgba(199,208,190,.35), transparent 70%)}
-  .story-hero .kicker{margin-bottom:34px}
-  .story-hero h1{font-size:clamp(40px,6vw,72px);line-height:1.14;max-width:14em;font-weight:500}
-  .story-hero h1 em{font-style:italic;color:var(--forest)}
-  .story-hero .sub{margin-top:28px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft)}
-  /* ————— story body ————— */
-  section.block{padding:10vh 6vw}
-  .narrow{max-width:660px;margin:0 auto;position:relative}
-  .narrow p{font-size:15.5px;line-height:2.05;margin-bottom:1.5em;color:var(--ink)}
-  .narrow p.lede::first-letter{font-family:'Cormorant Garamond',serif;font-size:3.2em;float:left;line-height:.82;
-    padding:6px 12px 0 0;color:var(--brass)}
-  .narrow .pull{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.3vw,26px);
-    line-height:1.5;color:var(--forest);margin:2em 0;padding-left:1.4em;border-left:1px solid var(--brass)}
-  .narrow .sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;color:var(--forest);margin-top:2em}
-  /* ————— credentials + logo strip ————— */
-  .creds-band{background:var(--sand);padding:14vh 6vw}
-  .creds-band .inner{max-width:900px;margin:0 auto;text-align:center}
-  .creds-band h2{font-size:clamp(28px,3.2vw,40px);line-height:1.2;margin:22px 0 40px}
-  .creds{list-style:none;max-width:620px;margin:0 auto 60px;text-align:left}
-  .creds li{font-size:13px;line-height:1.9;letter-spacing:.4px;color:var(--ink-soft);padding-left:18px;position:relative;margin-bottom:8px}
-  .creds li::before{content:"";position:absolute;left:0;top:13px;width:8px;height:1px;background:var(--brass)}
-  .logo-strip{display:flex;justify-content:center;align-items:center;gap:56px;flex-wrap:wrap}
-  .logo-strip a{display:inline-flex;line-height:0;transition:opacity .35s ease}
-  .logo-strip img{height:44px;width:auto;display:block;filter:grayscale(1);opacity:.62;transition:filter .45s ease,opacity .45s ease}
-  .logo-strip a:hover img{filter:grayscale(0);opacity:1}
-  .strip-note{margin-top:36px;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#93A295}
-  @media (max-width:720px){.logo-strip{gap:34px}.logo-strip img{height:36px}}
-  /* ————— closing ————— */
-  .closing{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:30px;padding:0 8vw}
-  .closing p{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3vw,36px);color:var(--forest-deep);max-width:20em;line-height:1.42;font-style:italic}
-  .cta-row{display:flex;gap:34px;flex-wrap:wrap;justify-content:center}
-  .cta{font-size:12px;letter-spacing:2.5px;color:var(--brass);text-decoration:none;text-transform:uppercase;
-    border-bottom:1px solid var(--brass);padding-bottom:5px;font-weight:400;transition:opacity .3s}
-  .cta:hover{opacity:.65}
-  /* ————— footer ————— */
-  footer{padding:56px 5vw 40px;border-top:1px solid var(--sand);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end}
-  footer .flogo{height:44px;width:auto;display:block}
-  footer small{display:block;max-width:46em;font-size:10.5px;line-height:1.8;color:#93A295;margin-top:12px}
-  footer .links{display:flex;gap:26px}
-  footer .links a{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);text-decoration:none}
-  footer .links a:hover{color:var(--brass)}
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity 1.1s cubic-bezier(.25,.46,.45,.94),transform 1.1s cubic-bezier(.25,.46,.45,.94)}
-  .reveal.visible{opacity:1;transform:none}
-  .narrow h2{font-size:clamp(26px,3vw,36px);margin:2.4em 0 1em;line-height:1.2}
-  .narrow strong{font-weight:600}
-  .narrow a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(176,141,87,.4)}
-  .narrow a:hover{border-bottom-color:var(--brass)}
-  .narrow ul{list-style:none;margin:0 0 1.5em}
-  .narrow ul li{font-size:15.5px;line-height:2.05;margin-bottom:1em;color:var(--ink);padding-left:24px;position:relative}
-  .narrow ul li::before{content:"";position:absolute;left:0;top:16px;width:10px;height:1px;background:var(--brass)}
-  .pull-note{display:block;font-family:'Montserrat',sans-serif;font-style:normal;font-size:11px;letter-spacing:1.5px;color:var(--ink-soft);margin-top:14px}
-  /* birlesik govde metni — 18px / 1.3 / 300 (isaretlenen metin kutusu) */
-  .block p:not(.sub):not(.kicker):not(.lede):not(.sig):not(.up-list):not(.intro-link):not(.alist-note), .narrow p:not(.sub):not(.lede):not(.sig), .narrow li{font-size:18px;line-height:1.3;font-weight:300}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Libre+Franklin:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/page-article.css">
 </head>
 <body>
 <header id="siteHeader">
-  <a class="wordmark" href="en.html" data-page-link="en.html" aria-label="Novocura — home"><img class="logo-dark" src="data:image/png;base64,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" alt="Novocura Homeopathy"></a>
+  <a class="wordmark" href="en.html" data-page-link="en.html" aria-label="Novocura — home"><img class="logo-dark" src="media/logo.png" alt="Novocura Homeopathy"></a>
   <nav>
     <a href="en.html#about" data-page-link="en.html#about">About</a>
     <a href="booking.html#seanslar" data-page-link="booking.html#seanslar">Sessions</a>
@@ -108,6 +23,7 @@
   </nav>
 </header>
 
+<main id="main">
 <section class="story-hero" id="top">
   <div class="kicker reveal">Notes from practice</div>
   <h1 class="reveal">Remedy <em>Maps</em></h1>
@@ -149,9 +65,10 @@
     <a class="cta" href="en.html" data-page-link="en.html">Back to the homepage</a>
   </div>
 </section>
+</main>
 <footer>
   <div>
-    <img class="flogo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcoAAABcCAMAAADZCgUEAAAASFBMVEUAAAAAAAABAwIAAAAyUDgSZhQwTTYvSTVaXlo6XEEHbGwA/wA7WkEA//////87VUBAYEVUWyteDAxAV0P//wAAAGpqAGpVqlX0k+jnAAAAGHRSTlMB816c4xCeYAzlBQGlAQFh2w8EUwECAgOMf64PAAAMvklEQVR42u1diZqjKBCGKgE16e059nj/N11OxUgVkO3pjT3wzTcdoxGsn7oLFIJuSk+TEaN9gTYtdz3pQYerNyWMY8n7ouzH0S7dfuhJqHm1eM6DGBdvFkphWRMGJS4vYGHS5n0ayvL6SKr7MtnmDZ+hLS+NpV6McDCaZRpYXlxTWiVpofzHqsuB5YXbXw7J9buFUq0W0Wl4JBfmSW19kNn+f3MgDiyvavBYmeptnQCld0mGjL1c88iB90AyKC1bDr68Ilea5H9836DU0/RJETx40T7AtqspSQtaQPKWceVdK+eT8A0Rwf4r0cGdAvc/RyxEGRsC10e4ExZOxU6A6UPW+ygMPjTyV5gNC8oPDud7pl8gO+Ryf03mjtWLENkzg3LxvKoqE9fTCMhTyExs/2jhUk9uarBAAxF/SXYCWR+S6+MwrkNfQHYdhnXqO/UEgjnhP2MHlFJWLliF8vnJGKvLoXSMClUs/YNT3bCDfZzMHKGRPYcMc52HCvXngfNUQmpYxIMT3eR3gobB5GOoXDtbzlOzciz4CKX3TVz8Z67OF4rOKJmhQcecECyUHTIJa7wApfNADAyomwHVyWGe9GDJ0GYzeDxDqkmrmzjoypgfWawZO1fmC1JDYqgsKUFKy1jqISlqFMmJPE2QUBbk19g3qOP9sYrPgTRV2K2u1E5XzkcoXb7Lwqur4ViQgsISZB8nASeriScB2adcgMMSqV7wl0ApmqGUAPy1SllduSyTA9M4wNQW7XH1BDerSo1Lea0VKCn2p8iM1JPSdCafhCSm7Ne7SM/8XwZlm4SV/LUqMqUKAQHwQR8PpYVuWbYgkAV1rUBJYAmyT5MwFgb5JL2zRZAyhJPiZV/g06B0vfNsqWI1T8DSJAG7Wrka8HOqFPQkalxJQACUfQf96p3QK7So7jchOFrBL4ESG6H0VzG4m8nnmZMmDLGdORiuQd668HpMYVagLFtj0E0xxlYtPwlp9CNvQ0DZnWQY4xdB2Wb0cONz/DgZkzBzwtTFz9eQek62j8uUGOtdciI24lUSWyC7np+36rCD7yuzvcyWPW7e55o98Tfk1UFu5tLTYemghI0N5xBBsBfdalCW6AOyn8ystmw1eiokwrIIaTUnPxJKbGZKRmw40ep4M3cxrQlkPcxF78Gg9xAMQtoh2fA6Y1mEskYx2cOWspPEzHTBvkDaB0HZFX6lKOPsm9VyYC51J+eYTEsmhrUPEWgm37XjdSIQyD4zkZewhV8itsvi2nTpl68fECJoM3pqzxW8kDz5oQROegluSS50Vx+QvVWhPE32EpTVCAc0BTBZilWhxJeAEho9EVmTaMqvD0lmz8apmU3rIwQhBqvpmE+G16MO+mAoT2wJsjtiSw4CPh1KaA0PQGWOOtlq5ak5cJs9nLJlBrdoFandpuXjAA8kegpKhj0ez9CRngqUUIZSfAaUGP3U1omTE5EapIPp4P4rz5XLwWHxbsjMVfoc8DoqIZAdVk0DEI9P8kQehWTBT4Nya41QHroomf9BdiasdhN2We4ZklFFzq7I2bRAeaTi01BC0ykysf7SXAm+OKW9O9uHTCUNRF4nqL9F59pzMjqTpJ4VRYJSNwiAB9PnowXsw485xOUzUH6mrmz1fawgzltxlBabt3W3Z5TLkRj/9S0hqbdzLqpO+CMPeOWmz4dDeThHpreegvLTLdjG/h4uOo989bGB9a8UKdiKmJU9/tNd8f2wCMgiTvkjjxTNsKL8SqhByZmeWDN6Gq3kbqn8wVC2iYETCR9+pUTivt1GVUGazt+0+MODl4teF2S/T+2dSR5K7CVzEWfZF5irBo4+O3DXVENQiGufYmop12wNH4dsWLylxLwEKPPdJVYfVDetUO7zmwrcyQp9oAUErpqwNl1KGYmPjcGKhhBBixyQNf3jSl+FSHJ18uWTaks9i8SiG5SOI9UhCsRBuTEeFU5nWYZP/OwE525Smy5UZgS7oZT/AcqGHhEr88dXgPjCD4vSoo2ZInQRSnUo6HEGkRaCSluCJPUhdBZjJeO7xesEWYnmYC/jYz9b0uHiJigb7IZKp75S0iwmmKkmgKsyKI+rRdY5WK9ENQFlpgKTemYeABotFp4Gtbo6IpHM4A89xnYjlNXZg7Ki6F2hgBLTEpnTFWuZVADizB592Fdi9nWUvkhENQ87kBKo6lHmAapmHTdLGtmyr+aEEZmUc4jYBmVNE0ioyIK4D4h2RZOTfpst34UadeHNHuVrQnYkf07BEiI8S5r1mBw/s6igpq8CW9aWUEg20ADdvEzPyh5VeQ68sVhCNXHrS0GidnTCdlap5sMLWL0cHMj125Q0bLEuhKzFkshkLkhq1i0P/+Ma77Ll0dhv+dIrCrBRLpahZKU6ky7YPRGXyrqpOUZiM4t1nfLUSIgBqVhGWQ7DAlM6LHt5psXwQGaStGDJKUSKsMCkwxur08pQclhCNb+yydhkzRrt4HoL8nQ5+CEBZBWdFt0BJV/ST2DZ5g3IxjgJUZv7TGUR+Sgl14rpoZDZQKaYqe4Ebdbom1tmMOWMaJlw05QqRdSV29JngnLOErmETpdd0pqLbfQaiussqn0ULZmeRWasti8lqZCs7W/IF6hojYY0Vgi8rskZ2WC1B3fnmqwBYTOXoWTFaIXQ+UMDNjvorb78aRFeSx9QKFGSFaGcJYOwv2yzvLiUWfGTdalCQHXdEpK7vJ0z+breYxw27BJbgjIuKUbokxDZgOLCUcSOSAvK9iu35boArQuN4bBWFprKS6RMa6TJu0Jaf31aPhyX0Obrc1OO+rw6GvZzEFzFqCj9n5uJK7kOUHo7x5jgslhg1+WsK/1yfXLNftU4IR+u9ruOS/c+ejpAKbF9pflOXW4gG7EAyichP84I/Hhp9sEvkN1MGpEH5ebtk9ehYS2CM3L/8fGhsWPIi7V59lx5T9i4KgG/IjZkRt7s3/Xug0HGqM0EmqYB5etB6UMCennfHEgXMN8Cd28q+Ci70gyWEpEaGe3/bGkRVwre7BnoLcnlgbwppSKY7w8O52gv0d4XbXSsO4/iE1zIPC2VVcvkNWrGxtYbuQ8oX68F08ZFyddZ7d/d1siVejm+oMIvc1f3sXnzyzXHgRZCnYqX19Wy3fsSLCCrNM3Rvgm2rnKLZtdBvFfTlNbfd3WTzkRVCZ5o6FgojxtJKPG3D985/2VA+WptCaaN1tFtdB6H3zZdu7UGh6U+bpmBD/qosTn+ixqwwewRLpozbVvfW3adp297PN0jaoI1O15Z8crOSLJtlEnA+kV5G1Pa/+f4qopZkPuEQPFjOMZzRA7IAyJQBoW7hN0bS9G+41e4N368zENcwo51ym+NDGgWJbb1ldEBEeo9KNDvs4/alVflYfGjiPsRWiAediXMj441S8WJEu5y2qgznXwcTKH8DxvGm90er4ViKK9zq0b8h9n+tUyqtMVz8g6mx/Jn5Fym3I6Gcqfggd6HfOER5mIVHBaI7SYIhVNhf50WKPePeEGmVAenQ0WROy+pauDnsngg13ApGbQjoMy/hoO4zE/UoCTvQggCEE9Cuacbrqgw37IaOoskGOP9yiXwYXyR5SpSTfOtiyspfgPIGaAGJQrBEv6R9FjCAnum3hWZMgLoYudq9dtnib06XcR9m9ftOjqOjnW1eUjEbShDFcqjtESoQemvwOegDAeXRTIsoUyehrWA0sZooaQnuSSz5nIiRdIcQciOHOmxzEIFKIGeECT3n9iyFUogdrK7REvc+J5cSQclhuOEnf3+zm6MJosWPxDkA0gn908PNwIKSqzoyvgt8lAWxxuvuyySrsUAwcanjitNtkh2FX/f+U23kad1Acpdlv1XriyawI9siQ3jDb8DuDaU2hyK7CYtMiSVk66a3XK7RVc+QAlJtj4NZXrLQ7EXfErAtr3/4XWVZYisWs2odij1lshUMQnNRtEboDzJTCzptR4LFsWZhfZ3g8BzUF6ZKZNr6f3/AObst2WKilP8MPWCHqSIzbkRkQGqUEL5jsWQHVJRp98BypjvUD4lEsHcV82KrKS5G0oqFBbJBW1QZncBrBCdDiD+HlBGXan3qqzFGzmOLWOUoPrKGEoeYtEvAfKovFIR6nc5My3+jlB6E9Z42Bxubo2X8EUi7hutGt57SJIGynkO8kgWMyMNd2HV6m8E5dZMyFqG9T4m8ukolrxY8/tL2FmpfZJLGLcprBZiIHk9O3b3PODHN18YYtQA8sqQriH1bIwYHHl5OatDjY+ovh1vtAvYPoseMH6RFnd2Ge3y6jJtVzjaxdu8byI62tX9ksGVXwfKoSsHV442oBzt10H55yDEl7BhB5RfKUTwNqjwJZoxzBtkR3ut9i88WUAWoiQsmgAAAABJRU5ErkJggg==" alt="Novocura Homeopathy">
+    <img class="flogo" src="media/logo.png" alt="Novocura Homeopathy" loading="lazy">
     <small>Registered with the Alliance of Registered Homeopaths (ARH). Homeopathy is a complementary practice and is not a substitute for medical diagnosis or treatment. Novocura makes no claims to treat, cure, or prevent any disease. Always consult your GP about medical concerns and never discontinue prescribed medication without medical advice.</small>
   </div>
   <div class="links">

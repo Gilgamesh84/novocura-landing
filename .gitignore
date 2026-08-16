@@ -1,0 +1,20 @@
+# Node tooling (only used locally for the impeccable design detector / puppeteer)
+node_modules/
+package.json
+package-lock.json
+
+# AI assistant / tooling working directories
+.agent/
+.agents/
+.claude/
+.codex/
+.gemini/
+.hermes/
+.impeccable/
+.kiro/
+.opencode/
+.pi/
+
+# OS noise
+Thumbs.db
+.DS_Store
