@@ -2,7 +2,7 @@
     --forest:#2C4A3B; --forest-deep:#1B2E23; --parchment:#F6F1E7;
     --sand:#EAE2D0; --brass:#B08D57; --brass-text:#7A5C34; --sage:#C7D0BE; --ink:#3A4A40; --ink-soft:#556356;
     --rust:#9A4A2E; --rust-light:#C97456;
-    --ink-muted:#5A6A5C; --paper-raised:#FCF9F1;
+    --ink-muted:#526050; --paper-raised:#FCF9F1;
   }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -89,4 +89,15 @@ footer .links a:hover{color:var(--brass-text)}
    (or, on the home page, a confirmed-GSAP body.anim class) is what hides them. */
 @media (scripting:none){
   .reveal{opacity:1 !important;transform:none !important}
+}
+
+/* Touch targets: WCAG 2.2 AA asks for 24x24 CSS px. Several controls render
+   14-21px tall from their type size alone. Scoped to coarse pointers so the
+   desktop composition is untouched; padding grows the hit box, not the text. */
+@media (pointer:coarse){
+  body footer .links a{padding:5px 0}
+  body .cta,body .m-readmore,body .strip-toggle,body .story-link{padding-top:4px;padding-bottom:6px}
+  body nav a.home-btn{display:inline-flex;align-items:center;justify-content:center;min-width:26px;min-height:26px}
+  body .logo-strip a{display:inline-flex;align-items:center;min-height:26px}
+  body .narrow a[href^="mailto"],body .narrow a[href^="tel"]{display:inline-block;padding:3px 0}
 }
