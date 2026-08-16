@@ -74,7 +74,6 @@
 <hr class="divider">
 <section class="stage-intro" id="consultation">
   <h2 class="">The Anatomy of a Session</h2>
-  <div class="hint"><br></div>
 </section>
 <section class="stage-section" id="stageSection">
   <div class="stage-pin">
@@ -313,7 +312,7 @@ function buildJourneyPath() {
 buildJourneyPath();
 const tl = gsap.timeline({
   scrollTrigger: {
-    trigger: '#stageSection', start: 'top top', end: '+=4200',
+    trigger: '#stageSection', start: 'top top', end: '+=2600',
     pin: true, scrub: 1.2,
     onUpdate: self => { document.getElementById('progressBar').style.width = (self.progress * 100) + '%'; }
   }
