@@ -395,3 +395,9 @@ hr.divider{border:none;border-top:1px solid rgba(44,74,59,.2);width:min(140px,40
 .teaching .up-list span{color:var(--brass-text);margin:0 10px}
 
 body.anim .reveal{opacity:0}
+
+/* ——— Ben Kimim?: her ekranda katlanabilir — görünür kısım sadece ilk paragraf,
+     kutunun içindeki her şey "Devamını oku" ile açılır ——— */
+.about-text [data-collapsible]:not(.open)>*:not(.m-readmore){display:none}
+
+.about-text .m-readmore{display:inline-block;margin-top:14px;background:none;border:none;border-bottom:1px solid var(--brass);color:var(--brass-text);font-family:'Libre Franklin',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;padding:0 0 3px;cursor:pointer}
