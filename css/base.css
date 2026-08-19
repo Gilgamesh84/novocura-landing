@@ -80,32 +80,35 @@ header.on-dark nav a.nav-cta:hover,header.menu-open nav a.nav-cta:hover{backgrou
 
 /* ————— mobile header sizing (shared) ————— */
   @media (max-width:1100px){
-    nav a.nav-cta{padding:8px 15px 7px;letter-spacing:1.6px}
+    nav a.nav-cta{padding:8px 14px 7px;letter-spacing:1.4px}
   }
 
 @media (max-width:720px){
-    header{padding:16px 4vw;gap:10px}
-    nav a.nav-cta{gap:6px}
-    nav a.nav-cta .wa-icon{width:13px;height:13px}
-    nav a.lang-switch{padding:5px 9px 4px;font-size:10px;letter-spacing:1.2px}
-    nav a.nav-cta{padding:8px 13px 7px;font-size:10px;letter-spacing:1.2px}
+    header{padding:14px 4vw;gap:8px}
+    .wordmark img{height:48px}
+    nav a.nav-cta{gap:4px}
+    nav a.nav-cta .wa-icon{width:11px;height:11px}
+    nav a.lang-switch{padding:4px 8px 3px;font-size:9.5px;letter-spacing:1px}
+    nav a.nav-cta{padding:6px 10px 5px;font-size:9px;letter-spacing:.8px}
   }
 
 @media (max-width:480px){
-    header{padding:15px 4vw}
-    nav a.nav-cta{gap:5px}
-    nav a.nav-cta .wa-icon{width:12px;height:12px}
-    header nav{gap:8px}
-    nav a.lang-switch{padding:5px 8px 4px;letter-spacing:1px}
-    nav a.nav-cta{padding:8px 11px 7px;letter-spacing:1px}
+    header{padding:13px 4vw}
+    .wordmark img{height:44px}
+    nav a.nav-cta{gap:4px}
+    nav a.nav-cta .wa-icon{width:10px;height:10px}
+    header nav{gap:7px}
+    nav a.lang-switch{padding:4px 7px 3px;letter-spacing:.8px}
+    nav a.nav-cta{padding:6px 9px 5px;font-size:8.5px;letter-spacing:.6px}
   }
 
 @media (max-width:360px){
-    header{padding:14px 3.5vw}
-    header nav{gap:7px}
+    header{padding:12px 3.5vw}
+    .wordmark img{height:40px}
+    header nav{gap:6px}
     nav a.home-btn{width:26px;height:26px}
-    nav a.lang-switch{padding:5px 6px 4px;letter-spacing:.6px}
-    nav a.nav-cta{padding:8px 9px 7px;letter-spacing:.6px}
+    nav a.lang-switch{padding:4px 6px 3px;letter-spacing:.5px}
+    nav a.nav-cta{padding:6px 8px 5px;letter-spacing:.4px}
   }
 
 .narrow p.lede::first-letter{font-family:'Cormorant Garamond',serif;font-size:3.2em;float:left;line-height:.82;
