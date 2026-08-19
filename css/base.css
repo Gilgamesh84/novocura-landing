@@ -23,7 +23,7 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;color:var
 
 header.scrolled{background:rgba(246,241,231,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(44,74,59,.08)}
 
-.wordmark{display:flex;line-height:0}
+.wordmark{display:flex;line-height:0;flex:0 0 auto}
 
 .wordmark img{height:42px;width:auto;display:block}
 
@@ -35,13 +35,72 @@ nav a:hover::after{width:100%}
 
 nav a.book{color:var(--brass-text)}
 
-nav a.lang-switch{border:1px solid rgba(176,141,87,.55);border-radius:999px;padding:5px 12px 4px;color:var(--brass-text)}
+/* language switch — one segmented control, so it reads as a toggle, not two links */
+  .lang-toggle{display:inline-flex;align-items:center;flex:0 0 auto;
+    border:1px solid rgba(176,141,87,.55);border-radius:999px;overflow:hidden}
+
+nav a.lang-switch{padding:5px 11px 4px;color:var(--brass-text);line-height:1;transition:background .3s ease,color .3s ease}
+
+nav a.home-btn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
+    border:1px solid rgba(176,141,87,.55);border-radius:999px;color:var(--brass-text);
+    transition:background .3s ease,color .3s ease}
 
 nav a.home-btn::after{display:none}
 
+nav a.home-btn:hover{background:var(--brass-text);color:var(--parchment)}
+
+header.on-dark nav a.home-btn,header.menu-open nav a.home-btn{border-color:rgba(176,141,87,.8);color:var(--brass)}
+
 nav a.lang-switch::after{display:none}
 
-nav a.lang-switch.on{background:var(--brass-text);border-color:var(--brass-text);color:var(--parchment)}
+nav a.lang-switch.on{background:var(--brass-text);color:var(--parchment)}
+
+/* primary CTA (Randevu / Booking) — sits at the end of the nav, beside the burger on mobile */
+  nav a.nav-cta{flex:0 0 auto;white-space:nowrap;line-height:1;
+    background:var(--brass-text);border:1px solid var(--brass-text);border-radius:999px;
+    padding:9px 18px 8px;color:var(--parchment);letter-spacing:2px;
+    transition:background .3s ease,color .3s ease,border-color .3s ease}
+
+nav a.nav-cta::after{display:none}
+
+nav a.nav-cta:hover{background:transparent;color:var(--brass-text)}
+
+/* header over a dark section (home hero / journal) or with the mobile menu open */
+  header.on-dark .lang-toggle,header.menu-open .lang-toggle{border-color:rgba(176,141,87,.8)}
+
+header.on-dark nav a.lang-switch,header.menu-open nav a.lang-switch{color:var(--brass)}
+
+header.on-dark nav a.lang-switch.on,header.menu-open nav a.lang-switch.on{background:var(--brass);color:var(--forest-deep)}
+
+header.on-dark nav a.nav-cta,header.menu-open nav a.nav-cta{background:var(--brass);border-color:var(--brass);color:var(--forest-deep)}
+
+header.on-dark nav a.nav-cta:hover,header.menu-open nav a.nav-cta:hover{background:transparent;color:var(--brass)}
+
+/* ————— mobile header sizing (shared) ————— */
+  @media (max-width:1100px){
+    nav a.nav-cta{padding:8px 15px 7px;letter-spacing:1.6px}
+  }
+
+@media (max-width:720px){
+    header{padding:16px 4vw;gap:10px}
+    nav a.lang-switch{padding:5px 9px 4px;font-size:10px;letter-spacing:1.2px}
+    nav a.nav-cta{padding:8px 13px 7px;font-size:10px;letter-spacing:1.2px}
+  }
+
+@media (max-width:480px){
+    header{padding:15px 4vw}
+    header nav{gap:8px}
+    nav a.lang-switch{padding:5px 8px 4px;letter-spacing:1px}
+    nav a.nav-cta{padding:8px 11px 7px;letter-spacing:1px}
+  }
+
+@media (max-width:360px){
+    header{padding:14px 3.5vw}
+    header nav{gap:7px}
+    nav a.home-btn{width:26px;height:26px}
+    nav a.lang-switch{padding:5px 6px 4px;letter-spacing:.6px}
+    nav a.nav-cta{padding:8px 9px 7px;letter-spacing:.6px}
+  }
 
 .narrow p.lede::first-letter{font-family:'Cormorant Garamond',serif;font-size:3.2em;float:left;line-height:.82;
     padding:6px 12px 0 0;color:var(--brass-text)}
@@ -97,7 +156,6 @@ footer .links a:hover{color:var(--brass-text)}
 @media (pointer:coarse){
   body footer .links a{padding:5px 0}
   body .cta,body .m-readmore,body .strip-toggle,body .story-link{padding-top:4px;padding-bottom:6px}
-  body nav a.home-btn{display:inline-flex;align-items:center;justify-content:center;min-width:26px;min-height:26px}
   body .logo-strip a{display:inline-flex;align-items:center;min-height:26px}
   body .narrow a[href^="mailto"],body .narrow a[href^="tel"]{display:inline-block;padding:3px 0}
 }

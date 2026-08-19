@@ -15,9 +15,9 @@ header.on-dark nav a{color:rgba(246,241,231,.75)}
 header.on-dark nav a.book{color:var(--brass-text)}
 
 @media (max-width:720px){
-    .wordmark img{height:34px}
-    header{gap:26px}
-    nav{gap:20px;flex:0 0 auto}
+    .wordmark img{height:clamp(20px,6.4vw,30px)}
+    header{gap:10px}
+    nav{gap:10px;flex:0 0 auto}
   }
 
 /* ————— hero ————— */
@@ -294,11 +294,12 @@ body.anim .progress-label{display:block;position:absolute;left:6vw;bottom:calc(8
 .m-nav{display:none}
 
 @media (max-width:1100px){
-    nav{margin-left:auto;gap:16px}
-    nav a:not(.home-btn){display:none}
+    nav{margin-left:auto;gap:14px}
+    /* mobilde yalnızca dil anahtarı + Randevu butonu + hamburger kalır */
+    nav a:not(.nav-cta):not(.lang-switch){display:none}
     /* hamburger menü (1100 altı) */
-    nav{gap:16px}
-    .m-burger{display:flex;flex-direction:column;justify-content:center;gap:6px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:8px 4px}
+    nav{gap:14px}
+    .m-burger{display:flex;flex-shrink:0;flex-direction:column;justify-content:center;gap:6px;width:34px;height:40px;background:none;border:none;cursor:pointer;padding:8px 3px}
     .m-burger span{display:block;width:22px;height:1px;background:var(--forest);margin:0 auto;transition:transform .3s ease}
     header.on-dark .m-burger span,header.menu-open .m-burger span{background:var(--parchment)}
     header.menu-open .wordmark .logo-dark{display:none}
