@@ -1,8 +1,9 @@
 :root{
-    --forest:#2C4A3B; --forest-deep:#1B2E23; --parchment:#F6F1E7;
-    --sand:#EAE2D0; --brass:#B08D57; --brass-text:#7A5C34; --sage:#C7D0BE; --ink:#3A4A40; --ink-soft:#556356;
-    --rust:#9A4A2E; --rust-light:#C97456;
-    --ink-muted:#526050; --paper-raised:#FCF9F1;
+    /* Materia Medica — soğuk arşiv kâğıdı + kurumuş yaprak yeşili */
+    --forest:#3E4735; --forest-deep:#22261F; --parchment:#EAEBE6;
+    --sand:#D2D4CB; --brass:#A8B884; --brass-text:#49562F; --sage:#C6CDB6; --ink:#22261F; --ink-soft:#4A5145;
+    --rust:#9A4A2E; --rust-light:#A8B884;
+    --ink-muted:#535A4D; --paper-raised:#F3F4F0;
   }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,7 +22,7 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;color:var
   header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;justify-content:space-between;align-items:center;
     padding:22px 5vw;transition:background .4s ease, box-shadow .4s ease}
 
-header.scrolled{background:rgba(246,241,231,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(44,74,59,.08)}
+header.scrolled{background:color-mix(in srgb, var(--parchment) 92%, transparent);backdrop-filter:blur(10px);box-shadow:0 1px 0 color-mix(in srgb, var(--forest) 8%, transparent)}
 
 .wordmark{display:flex;line-height:0;flex:0 0 auto}
 
@@ -37,19 +38,19 @@ nav a.book{color:var(--brass-text)}
 
 /* language switch — one segmented control, so it reads as a toggle, not two links */
   .lang-toggle{display:inline-flex;align-items:center;flex:0 0 auto;
-    border:1px solid rgba(176,141,87,.55);border-radius:999px;overflow:hidden}
+    border:1px solid color-mix(in srgb, var(--brass) 55%, transparent);border-radius:999px;overflow:hidden}
 
 nav a.lang-switch{padding:5px 11px 4px;color:var(--brass-text);line-height:1;transition:background .3s ease,color .3s ease}
 
 nav a.home-btn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
-    border:1px solid rgba(176,141,87,.55);border-radius:999px;color:var(--brass-text);
+    border:1px solid color-mix(in srgb, var(--brass) 55%, transparent);border-radius:999px;color:var(--brass-text);
     transition:background .3s ease,color .3s ease}
 
 nav a.home-btn::after{display:none}
 
 nav a.home-btn:hover{background:var(--brass-text);color:var(--parchment)}
 
-header.on-dark nav a.home-btn,header.menu-open nav a.home-btn{border-color:rgba(176,141,87,.8);color:var(--brass)}
+header.on-dark nav a.home-btn,header.menu-open nav a.home-btn{border-color:color-mix(in srgb, var(--brass) 80%, transparent);color:var(--brass)}
 
 nav a.lang-switch::after{display:none}
 
@@ -68,7 +69,7 @@ nav a.nav-cta::after{display:none}
 nav a.nav-cta:hover{background:transparent;color:var(--brass-text)}
 
 /* header over a dark section (home hero / journal) or with the mobile menu open */
-  header.on-dark .lang-toggle,header.menu-open .lang-toggle{border-color:rgba(176,141,87,.8)}
+  header.on-dark .lang-toggle,header.menu-open .lang-toggle{border-color:color-mix(in srgb, var(--brass) 80%, transparent)}
 
 header.on-dark nav a.lang-switch,header.menu-open nav a.lang-switch{color:var(--brass)}
 
