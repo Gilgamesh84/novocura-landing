@@ -56,10 +56,12 @@ nav a.lang-switch::after{display:none}
 nav a.lang-switch.on{background:var(--brass-text);color:var(--parchment)}
 
 /* primary CTA (Randevu / Booking) — sits at the end of the nav, beside the burger on mobile */
-  nav a.nav-cta{flex:0 0 auto;white-space:nowrap;line-height:1;
+  nav a.nav-cta{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;white-space:nowrap;line-height:1;
     background:var(--brass-text);border:1px solid var(--brass-text);border-radius:999px;
     padding:9px 18px 8px;color:var(--parchment);letter-spacing:2px;
     transition:background .3s ease,color .3s ease,border-color .3s ease}
+
+nav a.nav-cta .wa-icon{width:15px;height:15px;flex:0 0 auto;margin-top:-1px}
 
 nav a.nav-cta::after{display:none}
 
@@ -83,12 +85,16 @@ header.on-dark nav a.nav-cta:hover,header.menu-open nav a.nav-cta:hover{backgrou
 
 @media (max-width:720px){
     header{padding:16px 4vw;gap:10px}
+    nav a.nav-cta{gap:6px}
+    nav a.nav-cta .wa-icon{width:13px;height:13px}
     nav a.lang-switch{padding:5px 9px 4px;font-size:10px;letter-spacing:1.2px}
     nav a.nav-cta{padding:8px 13px 7px;font-size:10px;letter-spacing:1.2px}
   }
 
 @media (max-width:480px){
     header{padding:15px 4vw}
+    nav a.nav-cta{gap:5px}
+    nav a.nav-cta .wa-icon{width:12px;height:12px}
     header nav{gap:8px}
     nav a.lang-switch{padding:5px 8px 4px;letter-spacing:1px}
     nav a.nav-cta{padding:8px 11px 7px;letter-spacing:1px}
