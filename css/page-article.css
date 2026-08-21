@@ -18,7 +18,7 @@ nav{display:flex;gap:34px;align-items:center}
   .story-hero{min-height:78vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16vh 6vw 8vh;position:relative}
 
 .story-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 60% 45% at 50% 42%, rgba(199,208,190,.35), transparent 70%)}
+    background:radial-gradient(ellipse 60% 45% at 50% 42%, color-mix(in srgb, var(--sage) 35%, transparent), transparent 70%)}
 
 .story-hero .kicker{margin-bottom:34px}
 
@@ -75,7 +75,7 @@ nav{display:flex;gap:34px;align-items:center}
 
 .narrow strong{font-weight:600}
 
-.narrow a{color:var(--brass-text);text-decoration:none;border-bottom:1px solid rgba(176,141,87,.4)}
+.narrow a{color:var(--brass-text);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--brass) 40%, transparent)}
 
 .narrow a:hover{border-bottom-color:var(--brass)}
 

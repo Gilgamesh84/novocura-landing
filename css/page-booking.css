@@ -18,7 +18,7 @@ nav{display:flex;gap:34px;align-items:center}
   .story-hero{min-height:78vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16vh 6vw 8vh;position:relative}
 
 .story-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 60% 45% at 50% 42%, rgba(199,208,190,.35), transparent 70%)}
+    background:radial-gradient(ellipse 60% 45% at 50% 42%, color-mix(in srgb, var(--sage) 35%, transparent), transparent 70%)}
 
 .story-hero .kicker{margin-bottom:34px}
 
@@ -77,7 +77,7 @@ nav{display:flex;gap:34px;align-items:center}
 
 .pull-note{display:block;font-family:'Libre Franklin',sans-serif;font-style:normal;font-size:11px;letter-spacing:1.5px;color:var(--ink-soft);margin-top:14px}
 
-.narrow a.alist-item{display:block;text-decoration:none;color:inherit;border-top:1px solid rgba(44,74,59,.22);padding:38px 0 34px;transition:border-color .35s ease}
+.narrow a.alist-item{display:block;text-decoration:none;color:inherit;border-top:1px solid color-mix(in srgb, var(--forest) 22%, transparent);padding:38px 0 34px;transition:border-color .35s ease}
 
 .narrow a.alist-item:first-of-type{border-top:none;padding-top:6px}
 
@@ -97,21 +97,21 @@ nav{display:flex;gap:34px;align-items:center}
 
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:70px}
 
-.duo>div:last-child{border-left:1px solid rgba(44,74,59,.18);padding-left:70px}
+.duo>div:last-child{border-left:1px solid color-mix(in srgb, var(--forest) 18%, transparent);padding-left:70px}
 
-form.cform{background:var(--paper-raised);border:1px solid rgba(176,141,87,.35);border-radius:20px;padding:48px 46px 42px;box-shadow:0 24px 50px -34px rgba(27,46,35,.28)}
+form.cform{background:var(--paper-raised);border:1px solid color-mix(in srgb, var(--brass) 35%, transparent);border-radius:20px;padding:48px 46px 42px;box-shadow:0 24px 50px -34px color-mix(in srgb, var(--forest-deep) 28%, transparent)}
 
 form.cform .frow{margin-bottom:28px}
 
 form.cform label{display:block;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brass-text);margin-bottom:8px}
 
-form.cform input,form.cform textarea{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(44,74,59,.3);padding:10px 2px;font-family:'Libre Franklin',sans-serif;font-size:15px;color:var(--ink);outline:none;box-sizing:border-box}
+form.cform input,form.cform textarea{width:100%;background:transparent;border:none;border-bottom:1px solid color-mix(in srgb, var(--forest) 30%, transparent);padding:10px 2px;font-family:'Libre Franklin',sans-serif;font-size:15px;color:var(--ink);outline:none;box-sizing:border-box}
 
 form.cform input:focus,form.cform textarea:focus{border-bottom-color:var(--brass)}
 
 form.cform textarea{min-height:130px;resize:vertical}
 
-@media (max-width:900px){.duo{grid-template-columns:1fr;gap:60px}.duo>div:last-child{border-left:none;padding-left:0;border-top:1px solid rgba(44,74,59,.18);padding-top:60px}}
+@media (max-width:900px){.duo{grid-template-columns:1fr;gap:60px}.duo>div:last-child{border-left:none;padding-left:0;border-top:1px solid color-mix(in srgb, var(--forest) 18%, transparent);padding-top:60px}}
 
 .m-readmore{display:none;background:none;border:none;border-bottom:1px solid var(--brass);color:var(--brass-text);font-family:'Libre Franklin',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;padding:0 0 4px;margin-top:16px;cursor:pointer;font-weight:400}
 
