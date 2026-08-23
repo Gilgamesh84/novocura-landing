@@ -42,7 +42,7 @@
 <section class="block about" id="about">
   <div class="id-card">
     <figure class="reveal">
-      <img id="portraitImg" src="media/hande-portrait.jpg" alt="Hande, founder and practitioner of Novocura, in her consulting room in Edinburgh" class="" loading="lazy">
+      <img id="portraitImg" src="media/hande-portrait.jpg" alt="Hande, founder and practitioner of Novocura, in her consulting room in Edinburgh" class="">
     </figure>
     <h2 class="reveal name-title">Hom. Hande Özçıkrıkçı <span class="creds-inline">(DiHom, MARH, CHE)</span></h2>
   <div class="logo-strip reveal">
@@ -348,9 +348,23 @@ document.querySelectorAll('.m-readmore').forEach(function(btn){
   });
 });
 startAll();
+
+/* Yerlesim kaymalarina karsi sigorta: yukleme sonrasi tetikleyiciler tazelenir;
+   gorunur alanda gizli kalmis oge kalirsa guvenlik agi devreye girer */
+window.addEventListener('load', function(){
+  setTimeout(function(){ if (window.ScrollTrigger) ScrollTrigger.refresh(); }, 1400);
+  setTimeout(function(){
+    if (!document.body.classList.contains('anim')) return;
+    document.querySelectorAll('.reveal').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.85 && parseFloat(getComputedStyle(el).opacity) < 0.05) {
+        el.style.opacity = '1'; el.style.transform = 'none';
+      }
+    });
+  }, 4500);
+});
 var stripToggle=document.querySelector('.strip-toggle');
 if(stripToggle){stripToggle.addEventListener('click',function(){var l=document.querySelector('.id-card .creds-list');var open=l.hasAttribute('hidden');if(open){l.removeAttribute('hidden');}else{l.setAttribute('hidden','');}stripToggle.classList.toggle('open',open);stripToggle.setAttribute('aria-expanded',open?'true':'false');});}
 </script>
-
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8b48fc8f6c914385af88e9ff5c9f421f"}'></script><!-- End Cloudflare Web Analytics -->
 </body></html>
