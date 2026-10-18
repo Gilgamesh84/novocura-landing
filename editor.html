@@ -186,6 +186,9 @@
 <div id="toast"></div>
 <script>
 const RAW_BASE = 'https://raw.githubusercontent.com/Gilgamesh84/novocura-landing/main/';
+/* CSS/JS/image assets must come from a host that serves them with the right type —
+   raw.githubusercontent blocks stylesheets, so assets resolve through jsDelivr. */
+const ASSET_BASE = 'https://cdn.jsdelivr.net/gh/Gilgamesh84/novocura-landing@main/';
 const qs = new URLSearchParams(location.search);
 const BASE = qs.get('base') || RAW_BASE;
 const stage = document.getElementById('stage');
@@ -229,6 +232,11 @@ function mountHtml(html){
     scriptsStore.push(s.outerHTML);
     s.replaceWith(parsed.createComment('nvx-script-'+(scriptsStore.length-1)));
   });
+  /* inside srcdoc, relative links would break — anchor them to the asset host */
+  const base = parsed.createElement('base');
+  base.className = 'nvx';
+  base.href = ASSET_BASE;
+  parsed.head.insertBefore(base, parsed.head.firstChild);
   const fix = parsed.createElement('style');
   fix.className = 'nvx';
   fix.textContent = '.reveal,.jbadge,.jtext{opacity:1 !important;transform:none !important}'
